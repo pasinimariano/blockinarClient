@@ -1,0 +1,31 @@
+.topBarUpper {
+  height: 3vh;
+  background-color: var(--green);
+}
+
+.topBarBottom {
+  height: 8vh;
+   background-color: var(--dark);
+}
+
+.titleContainer {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.title {
+  color: var(--gray);
+  font-size: 30px;
+  font-weight: bolder;
+  font-style: oblique;
+  letter-spacing: 0.3ex;
+  font-family: Lato;
+}
+
+.subtitle{
+  color: var(--gray);
+  margin-right: 10px;
+  font-family: Lato;
+}
+

@@ -1,9 +1,22 @@
+@font-face {
+  font-family: "Lato";
+  src: url("../assets/Lato/Lato-Light.ttf");
+  src: url("../assets/Lato/Lato-Bold.ttf");
+  src: url("../assets/Lato/Lato-Regular.ttf");
+}
+
+html {
+  --gray: #ffffffff;
+  --dark: #00001eff;
+  --green: #00ff99ff;
+}
+
 html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  color: var(--dark);
+  background: var(--gray);
 }
 
 a {
@@ -15,12 +28,60 @@ a {
   box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+.navBarUpper {
+  height: 3vh;
+  background-color: var(--green);
+}
+
+.navBarBottom {
+  height: 8vh;
+   background-color: var(--dark);
+}
+
+.navMainContainer {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.navTitle {
+  color: var(--gray);
+  font-size: 30px;
+  font-weight: bolder;
+  font-style: oblique;
+  letter-spacing: 0.3ex;
+  font-family: Lato;
+}
+
+.links {
+  cursor: pointer;
+  font-size: 20px;
+  color: var(--dark);
+  font-family: Lato;
+}
+
+.links:hover {
+  font-weight: bolder;
+  color: var(--green)
+}
+
+.msgErrorForm {
+  margin: 4px;
+  color: #d32f2f;
+}
+
+.layout1 {
+  background-color: var(--gray);
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.layout2 {
+  background-color: var(--dark);
+  height: 80vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
