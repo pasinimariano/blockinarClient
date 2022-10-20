@@ -1,0 +1,38 @@
+.navBarUpper {
+    height: 3vh;
+    background-color: var(--green);
+  }
+  
+  .navBarBottom {
+    height: 8vh;
+     background-color: var(--dark);
+  }
+  
+  .navMainContainer {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  
+  .navTitle {
+    color: var(--gray);
+    font-size: 30px;
+    font-weight: bolder;
+    font-style: oblique;
+    letter-spacing: 0.3ex;
+  }
+
+  .tableContainer {
+    background-color: red;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tableTitle {
+    margin: 20px
+  }
+
+  
+  
