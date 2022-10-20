@@ -20,10 +20,12 @@
   font-weight: bolder;
   font-style: oblique;
   letter-spacing: 0.3ex;
+  font-family: Lato;
 }
 
 .subtitle{
   color: var(--gray);
   margin-right: 10px;
+  font-family: Lato;
 }
 

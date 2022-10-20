@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Box, Container } from "@mui/material";
+import { Box, CircularProgress, Container } from "@mui/material";
 
 import getAllRooms from "../utils/getAllRooms";
 import NavigationBar from "../components/NavigationBar";
@@ -17,8 +17,15 @@ export default function Home() {
   return (
     <Box>
       <NavigationBar styles={styles} />
-      <Container maxWidth={false} className="basicLayout1">
-        <TableAllRooms styles={styles} />
+      <Container maxWidth={false} className="layout1">
+        {!allRooms ? (
+          <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
+        ) : (
+          <TableAllRooms allRooms={allRooms} styles={styles} />
+        )}
+      </Container>
+      <Container maxWidth={false} className="layout2">
+        HOLA
       </Container>
     </Box>
   );

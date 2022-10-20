@@ -1,38 +1,34 @@
-.navBarUpper {
-    height: 3vh;
-    background-color: var(--green);
-  }
-  
-  .navBarBottom {
-    height: 8vh;
-     background-color: var(--dark);
-  }
-  
-  .navMainContainer {
-    display: flex;
-    align-items: center;
-    height: 100%;
-  }
-  
-  .navTitle {
-    color: var(--gray);
-    font-size: 30px;
-    font-weight: bolder;
-    font-style: oblique;
-    letter-spacing: 0.3ex;
-  }
 
   .tableContainer {
-    background-color: red;
     height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
   }
 
-  .tableTitle {
-    margin: 20px
+  .tableTitleContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
+  .titleDetail {
+    font-size:xx-large;
+    font-weight: bolder;
+    color: var(--green)
+  }
+
+  .tableTitle {
+    font-size: 2rem;
+    margin: 20px;
+    line-height: 1.125;
+    font-family: Lato;
+  }
+
+.tablePaper {
+  width: 100%;
+  height: 80%;
+  margin-top: 20px;
+}
   
   
