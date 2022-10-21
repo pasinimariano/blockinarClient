@@ -12,9 +12,16 @@ import {
   Typography,
 } from "@mui/material";
 
-import { columnsAllRooms, StyledHeaders } from "./ColumnsTables";
+import { CellsTableAllRooms, CellsTableDayReservation } from "./CellsTable";
 
-export default function TableAllRooms({ allRooms, styles }) {
+export default function TableLayout({
+  title,
+  data,
+  columns,
+  cells,
+  Headers,
+  styles,
+}) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -33,7 +40,7 @@ export default function TableAllRooms({ allRooms, styles }) {
     <Container className={styles.tableContainer}>
       <Container className={styles.tableTitleContainer}>
         <Typography className={styles.titleDetail}> - </Typography>
-        <Typography className={styles.tableTitle}>NUESTROS CUARTOS</Typography>
+        <Typography className={styles.tableTitle}>{title}</Typography>
         <Typography className={styles.titleDetail}> - </Typography>
       </Container>
       <Paper className={styles.tablePaper}>
@@ -41,28 +48,32 @@ export default function TableAllRooms({ allRooms, styles }) {
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>
-                {columnsAllRooms.map((column) => (
-                  <StyledHeaders key={column.id} align={column.align}>
+                {columns.map((column) => (
+                  <Headers key={column.id} align={column.align}>
                     {column.label}
-                  </StyledHeaders>
+                  </Headers>
                 ))}
               </TableRow>
             </TableHead>
             <TableBody>
-              {allRooms &&
-                allRooms
+              {data &&
+                cells === "rooms" &&
+                data
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((room) => {
+                    return <CellsTableAllRooms room={room} key={room.id} />;
+                  })}
+
+              {data &&
+                cells === "reservations" &&
+                data
+                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                  .map((reservation) => {
                     return (
-                      <TableRow key={room.id}>
-                        <TableCell align="center">{room["category"]}</TableCell>
-                        <TableCell align="center">
-                          {room["max_occupancy"]}
-                        </TableCell>
-                        <TableCell align="center">
-                          {room["occupancy"]}
-                        </TableCell>
-                      </TableRow>
+                      <CellsTableDayReservation
+                        reservation={reservation}
+                        key={reservation.id}
+                      />
                     );
                   })}
             </TableBody>
@@ -76,7 +87,7 @@ export default function TableAllRooms({ allRooms, styles }) {
         }
         rowsPerPageOptions={[5, 10, 25]}
         component="div"
-        count={allRooms ? allRooms.length : 0}
+        count={data ? data.length : 0}
         rowsPerPage={rowsPerPage}
         page={page}
         onPageChange={handlChangePage}

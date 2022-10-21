@@ -82,6 +82,7 @@ a {
   background-color: var(--dark);
   height: 80vh;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }

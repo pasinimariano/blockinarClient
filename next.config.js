@@ -4,6 +4,7 @@ const nextConfig = {
   swcMinify: true,
   env: {
     GET_ALLROOMS_URL: process.env.GET_ALLROOMS_URL,
+    GET_DAYRESERVATIONS_URL: process.env.GET_DAYRESERVATIONS_URL,
   },
 };
 
