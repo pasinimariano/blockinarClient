@@ -3,9 +3,10 @@ import axios from "axios";
 import SwalError from "./swalError";
 
 const getAllData = async (setter, url) => {
+  const baseUrl = process.env.BASE_URL;
   try {
     await axios
-      .get(url)
+      .get(`${baseUrl}${url}`)
       .then((json) => setter(json.data))
       .catch((error) => SwalError(error.response.data.message));
   } catch {

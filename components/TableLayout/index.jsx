@@ -4,24 +4,15 @@ import {
   Paper,
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
 } from "@mui/material";
 
 import { CellsTableAllRooms, CellsTableDayReservation } from "./CellsTable";
 
-export default function TableLayout({
-  title,
-  data,
-  columns,
-  cells,
-  Headers,
-  styles,
-}) {
+export default function TableLayout({ data, columns, cells, Headers, styles }) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -38,19 +29,6 @@ export default function TableLayout({
 
   return (
     <Container className={styles.tableContainer}>
-      <Container className={styles.tableTitleContainer}>
-        <Typography className={styles.titleDetail}> - </Typography>
-        <Typography
-          className={
-            cells === "reservations"
-              ? styles.tableTitleWhite
-              : styles.tableTitleDark
-          }
-        >
-          {title}
-        </Typography>
-        <Typography className={styles.titleDetail}> - </Typography>
-      </Container>
       <Paper className={styles.tablePaper}>
         <TableContainer>
           <Table stickyHeader aria-label="sticky table">

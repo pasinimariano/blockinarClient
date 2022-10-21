@@ -76,5 +76,6 @@ export const columnsDayReservations = [
     id: "price_per_night",
     label: "Precio por noche",
     align: "center",
+    maxSize: "1500px",
   },
 ];
