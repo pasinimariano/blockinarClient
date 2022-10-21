@@ -3,6 +3,7 @@ import { TableRow, TableCell } from "@mui/material";
 export function CellsTableAllRooms({ room }) {
   return (
     <TableRow>
+      <TableCell align="center">{room["id"]}</TableCell>
       <TableCell align="center">{room["category"]}</TableCell>
       <TableCell align="center">{room["max_occupancy"]}</TableCell>
       <TableCell align="center">{room["occupancy"]}</TableCell>
@@ -11,7 +12,6 @@ export function CellsTableAllRooms({ room }) {
 }
 
 export function CellsTableDayReservation({ reservation }) {
-  console.log(reservation);
   return (
     <TableRow>
       <TableCell
@@ -40,7 +40,3 @@ export function CellsTableDayReservation({ reservation }) {
     </TableRow>
   );
 }
-/* 
-<TableCell align="center">
-        {`${reservation["check_in_date"].slice(11, 13)}:00`}
-      </TableCell> */

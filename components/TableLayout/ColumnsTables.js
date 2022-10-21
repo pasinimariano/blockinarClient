@@ -20,6 +20,11 @@ export const StyledHeadersWhite = styled(TableCell)(({ theme }) => ({
 
 export const columnsAllRooms = [
   {
+    id: "room_id",
+    label: "Habitación",
+    align: "center",
+  },
+  {
     id: "category",
     label: "Categoria",
     align: "center",

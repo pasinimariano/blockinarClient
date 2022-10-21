@@ -40,7 +40,15 @@ export default function TableLayout({
     <Container className={styles.tableContainer}>
       <Container className={styles.tableTitleContainer}>
         <Typography className={styles.titleDetail}> - </Typography>
-        <Typography className={styles.tableTitle}>{title}</Typography>
+        <Typography
+          className={
+            cells === "reservations"
+              ? styles.tableTitleWhite
+              : styles.tableTitleDark
+          }
+        >
+          {title}
+        </Typography>
         <Typography className={styles.titleDetail}> - </Typography>
       </Container>
       <Paper className={styles.tablePaper}>
@@ -81,11 +89,16 @@ export default function TableLayout({
         </TableContainer>
       </Paper>
       <TablePagination
+        className={
+          cells === "reservations"
+            ? styles.paginationWhite
+            : styles.paginationDark
+        }
         labelRowsPerPage="Mostrar"
         labelDisplayedRows={({ from, to, count }) =>
           `${from}-${to} de ${count} `
         }
-        rowsPerPageOptions={[5, 10, 25]}
+        rowsPerPageOptions={[5, 10]}
         component="div"
         count={data ? data.length : 0}
         rowsPerPage={rowsPerPage}
