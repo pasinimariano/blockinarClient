@@ -37,33 +37,35 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
+    setDayReservations(null);
     if (dayForGetData) {
       const urlDayReservations = `${dayReservationsUrl}${dayForGetData}`;
       getAllData(setDayReservations, urlDayReservations);
     }
   }, [dayForGetData]);
 
-  console.log(dayReservations);
   return (
     <Box>
       <NavigationBar styles={styles} />
-      {!dayReservations ? (
-        <Container maxWidth={false} className="layout1">
-          <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
-        </Container>
-      ) : (
-        <Container maxWidth={false} className="layout1">
-          <TableTitle
-            title={`RESERVAS AL DÍA ${daySelected}`}
-            styles={styles}
-            cells="reservations"
-          />
-          <ControlsDayReservation
-            currentDay={currentDay}
-            setDaySelected={setDaySelected}
-            setDayForGetData={setDayForGetData}
-            styles={styles}
-          />
+      <Container maxWidth={false} className="layout1">
+        <TableTitle
+          title={`RESERVAS AL DÍA ${daySelected}`}
+          styles={styles}
+          cells="reservations"
+        />
+        <ControlsDayReservation
+          currentDay={currentDay}
+          dayReservations={dayReservations}
+          setDayReservations={setDayReservations}
+          setDaySelected={setDaySelected}
+          setDayForGetData={setDayForGetData}
+          styles={styles}
+        />
+        {!dayReservations ? (
+          <Container className={styles.tableContainer}>
+            <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
+          </Container>
+        ) : (
           <TableLayout
             data={dayReservations}
             columns={columnsDayReservations}
@@ -71,8 +73,8 @@ export default function Home() {
             Headers={StyledHeadersBlack}
             styles={styles}
           />
-        </Container>
-      )}
+        )}
+      </Container>
 
       {!allRooms ? (
         <Container maxWidth={false} className="layout2">

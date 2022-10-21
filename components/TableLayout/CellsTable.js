@@ -34,7 +34,7 @@ export function CellsTableDayReservation({ reservation }) {
         0,
         10
       )} - ${reservation["check_out_date"].slice(11, 13)}:00`}</TableCell>
-      <TableCell align="center">{`${reservation["last_name"]} ${reservation["first_name"]}`}</TableCell>
+      <TableCell align="center">{`${reservation["last_name"]},  ${reservation["first_name"]}`}</TableCell>
       <TableCell align="center">{reservation["number_of_guests"]}</TableCell>
       <TableCell align="center">{`$ ${reservation["price_per_night"]}`}</TableCell>
     </TableRow>
