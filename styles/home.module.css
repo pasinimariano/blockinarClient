@@ -12,12 +12,6 @@
   align-items: center;
 }
 
-.titleDetail {
-  font-size:xx-large;
-  font-weight: bolder;
-  color: var(--green)
-}
-
 .tableTitleWhite {
   font-size: 25px;
   margin: 20px;
