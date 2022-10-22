@@ -8,6 +8,7 @@ import {
   TableHead,
   TablePagination,
   TableRow,
+  Typography,
 } from "@mui/material";
 
 import { CellsTableAllRooms, CellsTableDayReservation } from "./CellsTable";

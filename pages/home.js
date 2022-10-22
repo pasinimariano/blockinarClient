@@ -21,6 +21,7 @@ export default function Home() {
   const [dayReservations, setDayReservations] = useState(null);
   const [daySelected, setDaySelected] = useState();
   const [dayForGetData, setDayForGetData] = useState(false);
+  const [filterReservations, setFilterReservations] = useState(null);
 
   const currentDay = moment();
   const urlAllRooms = process.env.GET_ALLROOMS_URL;
@@ -55,10 +56,12 @@ export default function Home() {
         />
         <ControlsDayReservation
           currentDay={currentDay}
+          allRooms={allRooms}
           dayReservations={dayReservations}
           setDayReservations={setDayReservations}
           setDaySelected={setDaySelected}
           setDayForGetData={setDayForGetData}
+          setFilterReservations={setFilterReservations}
           styles={styles}
         />
         {!dayReservations ? (
@@ -67,7 +70,7 @@ export default function Home() {
           </Container>
         ) : (
           <TableLayout
-            data={dayReservations}
+            data={filterReservations}
             columns={columnsDayReservations}
             cells="reservations"
             Headers={StyledHeadersBlack}
