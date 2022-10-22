@@ -83,8 +83,8 @@ export default function ControlsDayReservation({
   }, [dayReservations]);
 
   return (
-    <Container className={styles.controlsContainer}>
-      <Grid sm={6} xl={6} className={styles.controlsGrids2}>
+    <Grid container spacing={1} className={styles.controlsContainer}>
+      <Grid xs={6} md={4} className={styles.controlsGrids2}>
         <TextField
           label="Filtrar por categoria"
           select
@@ -106,7 +106,7 @@ export default function ControlsDayReservation({
             })}
         </TextField>
       </Grid>
-      <Grid sm={6} md={12} className={styles.controlsGrids2}>
+      <Grid xs={6} md={4} className={styles.controlsGrids2}>
         <Button
           variant="outlined"
           color="success"
@@ -124,7 +124,7 @@ export default function ControlsDayReservation({
           <Image src="/iconUp.png" alt="Icon Up" width="40" height="30" />
         </Button>
       </Grid>
-      <Grid sm={6} xl={4} className={styles.controlsGrids2}>
+      <Grid xs={12} md={4} className={styles.controlsGrids2}>
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
           adapterLocale={"es-mx"}
@@ -150,6 +150,6 @@ export default function ControlsDayReservation({
           />
         </LocalizationProvider>
       </Grid>
-    </Container>
+    </Grid>
   );
 }
