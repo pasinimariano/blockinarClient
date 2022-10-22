@@ -1,32 +1,100 @@
 import { useEffect, useState } from "react";
 import { Box, CircularProgress, Container } from "@mui/material";
+import moment from "moment";
 
-import getAllRooms from "../utils/getAllRooms";
+import getAllData from "../utils/getAllData";
 import NavigationBar from "../components/NavigationBar";
-import TableAllRooms from "../components/HomePage/TableAllRooms";
+import TableTitle from "../components/TableLayout/TableTitle";
+import ControlsDayReservation from "../components/TableLayout/ControlsDayReservations";
+import TableLayout from "../components/TableLayout/";
+import {
+  columnsAllRooms,
+  columnsDayReservations,
+  StyledHeadersBlack,
+  StyledHeadersWhite,
+} from "../components/TableLayout/ColumnsTables";
 
 import styles from "../styles/home.module.css";
 
 export default function Home() {
   const [allRooms, setAllRooms] = useState(null);
+  const [dayReservations, setDayReservations] = useState(null);
+  const [daySelected, setDaySelected] = useState();
+  const [dayForGetData, setDayForGetData] = useState(false);
+  const [filterReservations, setFilterReservations] = useState(null);
+
+  const currentDay = moment();
+  const urlAllRooms = process.env.GET_ALLROOMS_URL;
+  const dayReservationsUrl = process.env.GET_DAYRESERVATIONS_URL;
 
   useEffect(() => {
-    getAllRooms(setAllRooms);
+    if (!allRooms) {
+      getAllData(setAllRooms, urlAllRooms);
+    }
+
+    const formatedCurrentDay = `${currentDay.format("YYYY-MM-D")}23:00:00`;
+    setDayForGetData(formatedCurrentDay);
+    setDaySelected(currentDay.format("D/MM"));
   }, []);
+
+  useEffect(() => {
+    setDayReservations(null);
+    if (dayForGetData) {
+      const urlDayReservations = `${dayReservationsUrl}${dayForGetData}`;
+      getAllData(setDayReservations, urlDayReservations);
+    }
+  }, [dayForGetData]);
 
   return (
     <Box>
       <NavigationBar styles={styles} />
       <Container maxWidth={false} className="layout1">
-        {!allRooms ? (
-          <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
+        <TableTitle
+          title={`RESERVAS AL DÍA ${daySelected}`}
+          styles={styles}
+          cells="reservations"
+        />
+        <ControlsDayReservation
+          currentDay={currentDay}
+          allRooms={allRooms}
+          dayReservations={dayReservations}
+          setDayReservations={setDayReservations}
+          setDaySelected={setDaySelected}
+          setDayForGetData={setDayForGetData}
+          setFilterReservations={setFilterReservations}
+          styles={styles}
+        />
+        {!dayReservations ? (
+          <Container className={styles.tableContainer}>
+            <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
+          </Container>
         ) : (
-          <TableAllRooms allRooms={allRooms} styles={styles} />
+          <TableLayout
+            data={filterReservations}
+            columns={columnsDayReservations}
+            cells="reservations"
+            Headers={StyledHeadersBlack}
+            styles={styles}
+          />
         )}
       </Container>
-      <Container maxWidth={false} className="layout2">
-        HOLA
-      </Container>
+
+      {!allRooms ? (
+        <Container maxWidth={false} className="layout2">
+          <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
+        </Container>
+      ) : (
+        <Container maxWidth={false} className="layout2">
+          <TableTitle title="NUESTROS CUARTOS" styles={styles} cells="rooms" />
+          <TableLayout
+            data={allRooms}
+            columns={columnsAllRooms}
+            cells="rooms"
+            Headers={StyledHeadersWhite}
+            styles={styles}
+          />
+        </Container>
+      )}
     </Box>
   );
 }
