@@ -19,7 +19,7 @@
 }
 
 .tableTitleWhite {
-  font-size: 2rem;
+  font-size: 25px;
   margin: 20px;
   line-height: 1.125;
   font-family: Lato;
@@ -27,7 +27,7 @@
 
 .tableTitleDark {
   color: var(--gray);
-  font-size: 2rem;
+  font-size: 25px;
   margin: 20px;
   line-height: 1.125;
   font-family: Lato;
@@ -36,38 +36,60 @@
 .controlsContainer {
   display: flex;
   justify-content: center;
-  height: 4vh;
+
   margin-top: 15px;
+  margin-bottom: 30px;
 }
 
 .controlsGrids1 {
-  width: 100%;
   display: flex;
   justify-content: space-around;
-  background-color: turquoise;
 }
 
 .controlsGrids2 {
-  width: 100%;
   display: flex;
   justify-content: center;
+
 }
 
 .tablePaper {
   width: 100%;
-  height: 75%;
+  height: 100%;
+
 }
 
 .paginationWhite {
   width: 100%;
-  color: var(--dark)
+  color: var(--dark);
+  border-bottom-left-radius: 10px;
 }
 
 .paginationDark {
-  background-color: var(--gray);
+  background-color: #B2B2B2;
   width: 100%;
   color: var(--dark);
-  margin-top: -5px;
+  margin-top: -3px;
+}
+
+.iconDownloadContainer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.iconDownload {
+  color: var(--green)
+}
+
+.noDataContainer {
+  height: 15vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
   
-  
+.noDataMessage {
+  color: red;
+  font-size: large;
+  font-family: Lato;
+}

@@ -13,6 +13,8 @@ import {
   StyledHeadersBlack,
   StyledHeadersWhite,
 } from "../components/TableLayout/ColumnsTables";
+import NoDataToShow from "../components/TableLayout/NoDataToShow";
+import ExportCSV from "../components/ExportCsv";
 
 import styles from "../styles/home.module.css";
 
@@ -44,7 +46,7 @@ export default function Home() {
       getAllData(setDayReservations, urlDayReservations);
     }
   }, [dayForGetData]);
-
+  console.log();
   return (
     <Box>
       <NavigationBar styles={styles} />
@@ -68,6 +70,11 @@ export default function Home() {
           <Container className={styles.tableContainer}>
             <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
           </Container>
+        ) : filterReservations && filterReservations.length === 0 ? (
+          <NoDataToShow
+            message="No existen reservas para mostrar"
+            styles={styles}
+          />
         ) : (
           <TableLayout
             data={filterReservations}
@@ -79,13 +86,22 @@ export default function Home() {
         )}
       </Container>
 
-      {!allRooms ? (
-        <Container maxWidth={false} className="layout2">
-          <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
+      <Container maxWidth={false} className="layout2">
+        <TableTitle title="NUESTROS CUARTOS" styles={styles} cells="rooms" />
+        <Container className={styles.iconDownloadContainer}>
+          <ExportCSV
+            csvData={allRooms}
+            fileName="nuestrosCuartos"
+            styles={styles}
+          />
         </Container>
-      ) : (
-        <Container maxWidth={false} className="layout2">
-          <TableTitle title="NUESTROS CUARTOS" styles={styles} cells="rooms" />
+        {!allRooms ? (
+          <Container className={styles.tableContainer}>
+            <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
+          </Container>
+        ) : allRooms && allRooms.length === 0 ? (
+          <NoDataToShow message="No se registran cuartos" styles={styles} />
+        ) : (
           <TableLayout
             data={allRooms}
             columns={columnsAllRooms}
@@ -93,8 +109,8 @@ export default function Home() {
             Headers={StyledHeadersWhite}
             styles={styles}
           />
-        </Container>
-      )}
+        )}
+      </Container>
     </Box>
   );
 }
