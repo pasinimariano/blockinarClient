@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
-import { Button, Container, TextField, MenuItem } from "@mui/material";
+import { Button, TextField, MenuItem, Tooltip } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -16,6 +16,7 @@ export default function ControlsDayReservation({
   setDaySelected,
   setDayForGetData,
   setFilterReservations,
+  setModalShow,
   styles,
 }) {
   const [date, setDate] = useState(dayjs(currentDay));
@@ -83,8 +84,8 @@ export default function ControlsDayReservation({
   }, [dayReservations]);
 
   return (
-    <Grid container spacing={1} className={styles.controlsContainer}>
-      <Grid xs={6} md={4} className={styles.controlsGrids2}>
+    <Grid container spacing={2} className={styles.controlsContainer}>
+      <Grid xs={6} md={3} className={styles.controlsGrids2}>
         <TextField
           label="Filtrar por categoria"
           select
@@ -106,25 +107,29 @@ export default function ControlsDayReservation({
             })}
         </TextField>
       </Grid>
-      <Grid xs={6} md={4} className={styles.controlsGrids2}>
-        <Button
-          variant="outlined"
-          color="success"
-          onClick={handleSortAsc}
-          sx={{ mr: 2 }}
-        >
-          <Image src="/iconDown.png" alt="Icon Down" width="40" height="30" />
-        </Button>
-        <Button
-          variant="outlined"
-          color="success"
-          onClick={handleSortDsc}
-          sx={{ ml: 2 }}
-        >
-          <Image src="/iconUp.png" alt="Icon Up" width="40" height="30" />
-        </Button>
+      <Grid xs={6} md={3} className={styles.controlsGrids2}>
+        <Tooltip title="Ordenar de A-Z">
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleSortAsc}
+            sx={{ mr: 2 }}
+          >
+            <Image src="/iconDown.png" alt="Icon Down" width="40" height="30" />
+          </Button>
+        </Tooltip>
+        <Tooltip title="Ordenar de Z-A">
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={handleSortDsc}
+            sx={{ ml: 2 }}
+          >
+            <Image src="/iconUp.png" alt="Icon Up" width="40" height="30" />
+          </Button>
+        </Tooltip>
       </Grid>
-      <Grid xs={12} md={4} className={styles.controlsGrids2}>
+      <Grid xs={6} md={3} className={styles.controlsGrids2}>
         <LocalizationProvider
           dateAdapter={AdapterDayjs}
           adapterLocale={"es-mx"}
@@ -149,6 +154,15 @@ export default function ControlsDayReservation({
             )}
           />
         </LocalizationProvider>
+      </Grid>
+      <Grid xs={6} md={3} className={styles.controlsGrids2}>
+        <Button
+          variant="contained"
+          color="secondary"
+          onClick={() => setModalShow(true)}
+        >
+          Crear reserva
+        </Button>
       </Grid>
     </Grid>
   );

@@ -12,12 +12,6 @@
   align-items: center;
 }
 
-.titleDetail {
-  font-size:xx-large;
-  font-weight: bolder;
-  color: var(--green)
-}
-
 .tableTitleWhite {
   font-size: 25px;
   margin: 20px;
@@ -92,4 +86,13 @@
   color: red;
   font-size: large;
   font-family: Lato;
+}
+
+.dialogColor {
+  background-color: #272822ff
+}
+
+.dialogTitle {
+  background-color: #272822ff;
+  color: var(--gray)
 }

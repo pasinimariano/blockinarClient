@@ -15,8 +15,10 @@ import {
 } from "../components/TableLayout/ColumnsTables";
 import NoDataToShow from "../components/TableLayout/NoDataToShow";
 import ExportCSV from "../components/ExportCsv";
+import BodyCreateReservation from "../components/Modal/Bodies/BodyCreateReservation";
 
 import styles from "../styles/home.module.css";
+import ModalLayout from "../components/Modal/ModalLayout";
 
 export default function Home() {
   const [allRooms, setAllRooms] = useState(null);
@@ -24,6 +26,7 @@ export default function Home() {
   const [daySelected, setDaySelected] = useState();
   const [dayForGetData, setDayForGetData] = useState(false);
   const [filterReservations, setFilterReservations] = useState(null);
+  const [modalShow, setModalShow] = useState(false);
 
   const currentDay = moment();
   const urlAllRooms = process.env.GET_ALLROOMS_URL;
@@ -64,6 +67,7 @@ export default function Home() {
           setDaySelected={setDaySelected}
           setDayForGetData={setDayForGetData}
           setFilterReservations={setFilterReservations}
+          setModalShow={setModalShow}
           styles={styles}
         />
         {!dayReservations ? (
@@ -111,6 +115,12 @@ export default function Home() {
           />
         )}
       </Container>
+      <ModalLayout
+        modalShow={modalShow}
+        setModalShow={setModalShow}
+        Body={BodyCreateReservation}
+        styles={styles}
+      />
     </Box>
   );
 }
