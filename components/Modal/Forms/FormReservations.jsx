@@ -7,6 +7,7 @@ import {
   CirculasProgress,
   Divider,
   FormGroup,
+  Container,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -15,6 +16,8 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
 import moment from "moment";
+
+import ResponsiveDialog from "../../Dialogs/ResponsiveDialog";
 
 export default function FormReservations({
   handleSubmit,
@@ -27,10 +30,12 @@ export default function FormReservations({
   setFieldValue,
   setFieldError,
   handleClose,
+  styles,
 }) {
   const currentDate = new Date();
   const [date, setDate] = useState(dayjs(currentDate));
   const [outDate, setOutDate] = useState(dayjs(currentDate));
+  const [openDialog, setOpenDialog] = useState(false);
   const today = new Date();
 
   const handleKeyDown = (event) => {
@@ -194,7 +199,8 @@ export default function FormReservations({
             />
           </LocalizationProvider>
         </Grid>
-        <Grid sm={4}>
+
+        <Grid sm={3}>
           <TextField
             name="room_id"
             label="Asignar habitación"
@@ -215,7 +221,7 @@ export default function FormReservations({
             }
           />
         </Grid>
-        <Grid sm={4}>
+        <Grid sm={3}>
           <TextField
             name="price_per_night"
             label="Precio por noche"
@@ -239,7 +245,7 @@ export default function FormReservations({
             }
           />
         </Grid>
-        <Grid sm={4}>
+        <Grid sm={3}>
           <TextField
             name="number_of_guests"
             label="Número de húespedes"
@@ -263,7 +269,32 @@ export default function FormReservations({
             }
           />
         </Grid>
+        <Grid sm={3}></Grid>
       </Grid>
+      <Divider sx={{ mt: 5, mb: 5 }} />
+      <Box display="flex" justifyContent="flex-end">
+        <Button color="error" variant="outlined" onClick={handleClose}>
+          Cancelar
+        </Button>
+        <Button
+          color="secondary"
+          variant="contained"
+          type="submit"
+          onClick={() => {
+            if (!errors) setOpenDialog(true);
+          }}
+          sx={{ ml: 2 }}
+        >
+          Crear
+        </Button>
+      </Box>
+      <ResponsiveDialog
+        openDialog={openDialog}
+        setOpenDialog={setOpenDialog}
+        title="¿Quieres crear la siguiente reserva?"
+        content={values}
+        styles={styles}
+      />
     </Box>
   );
 }

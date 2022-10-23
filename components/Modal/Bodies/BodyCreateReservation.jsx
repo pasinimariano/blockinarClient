@@ -59,6 +59,7 @@ export default function BodyCreateReservation({ handleClose, styles }) {
               setFieldValue={setFieldValue}
               setFieldError={setFieldError}
               handleClose={handleClose}
+              styles={styles}
             />
           )}
         </Formik>

@@ -28,4 +28,11 @@ export const validationSchema = Yup.object().shape({
       return parse(originalValue, "dd/MM/yyyy", new Date());
     })
     .typeError("Formato de fecha incorrecta"),
+  room_id: Yup.string().matches(/^\d+$/, "Solo se admiten números"),
+  price_per_night: Yup.string()
+    .required("Campo requerido")
+    .matches(/^\d+$/, "Solo se admiten números"),
+  number_of_guests: Yup.string()
+    .required("Campo requerido")
+    .matches(/^\d+$/, "Solo se admiten números"),
 });

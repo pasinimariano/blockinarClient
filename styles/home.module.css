@@ -87,3 +87,12 @@
   font-size: large;
   font-family: Lato;
 }
+
+.dialogColor {
+  background-color: #272822ff
+}
+
+.dialogTitle {
+  background-color: #272822ff;
+  color: var(--gray)
+}
