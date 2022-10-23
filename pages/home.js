@@ -124,11 +124,3 @@ export default function Home() {
     </Box>
   );
 }
-
-/* open,
-  handleClose,
-  selectedBody,
-  Body,
-  refreshData,
-  handleOpenSnackBar,
-  goTo, */

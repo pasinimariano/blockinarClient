@@ -1,17 +1,19 @@
-import { Box, Typography, Container } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Formik } from "formik";
 
 import { validationSchema } from "../../../schemas/SchemaCreateReservation";
 
 import FormReservations from "../Forms/FormReservations";
 
-export default function BodyCreateReservation({
-  handleClose,
-  currentDate,
-  styles,
-}) {
+export default function BodyCreateReservation({ handleClose, styles }) {
   const initialValues = {
     first_name: "",
+    last_name: "",
+    check_in_date: "",
+    check_out_date: "",
+    room_id: "",
+    price_per_night: "",
+    number_of_guests: "",
   };
 
   return (
@@ -43,6 +45,8 @@ export default function BodyCreateReservation({
             errors,
             isSubmitting,
             setFieldValue,
+            setFieldError,
+            setErrors,
           }) => (
             <FormReservations
               handleSubmit={handleSubmit}
@@ -53,6 +57,7 @@ export default function BodyCreateReservation({
               errors={errors}
               isSubmitting={isSubmitting}
               setFieldValue={setFieldValue}
+              setFieldError={setFieldError}
               handleClose={handleClose}
             />
           )}
