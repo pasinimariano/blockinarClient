@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import { Formik } from "formik";
 
@@ -6,6 +7,7 @@ import { validationSchema } from "../../../schemas/SchemaCreateReservation";
 import FormReservations from "../Forms/FormReservations";
 
 export default function BodyCreateReservation({ handleClose, styles }) {
+  const [openDialog, setOpenDialog] = useState(false);
   const initialValues = {
     first_name: "",
     last_name: "",
@@ -33,7 +35,7 @@ export default function BodyCreateReservation({ handleClose, styles }) {
         </Box>
         <Formik
           validationSchema={validationSchema}
-          onSubmit={(values) => console.log(values)}
+          onSubmit={() => setOpenDialog(true)}
           initialValues={initialValues}
         >
           {({
@@ -45,8 +47,6 @@ export default function BodyCreateReservation({ handleClose, styles }) {
             errors,
             isSubmitting,
             setFieldValue,
-            setFieldError,
-            setErrors,
           }) => (
             <FormReservations
               handleSubmit={handleSubmit}
@@ -57,8 +57,9 @@ export default function BodyCreateReservation({ handleClose, styles }) {
               errors={errors}
               isSubmitting={isSubmitting}
               setFieldValue={setFieldValue}
-              setFieldError={setFieldError}
               handleClose={handleClose}
+              openDialog={openDialog}
+              setOpenDialog={setOpenDialog}
               styles={styles}
             />
           )}

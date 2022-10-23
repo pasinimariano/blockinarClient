@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Box,
   TextField,
@@ -15,7 +15,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
-import moment from "moment";
 
 import ResponsiveDialog from "../../Dialogs/ResponsiveDialog";
 
@@ -28,20 +27,33 @@ export default function FormReservations({
   errors,
   isSubmitting,
   setFieldValue,
-  setFieldError,
   handleClose,
+  openDialog,
+  setOpenDialog,
   styles,
 }) {
-  const currentDate = new Date();
-  const [date, setDate] = useState(dayjs(currentDate));
-  const [outDate, setOutDate] = useState(dayjs(currentDate));
-  const [openDialog, setOpenDialog] = useState(false);
+  const [date, setDate] = useState(dayjs(null));
+  const [outDate, setOutDate] = useState(dayjs(null));
+  const [totalPrice, setTotalPrice] = useState(null);
   const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
   const handleKeyDown = (event) => {
     event.preventDefault();
   };
-  console.log(errors);
+
+  useEffect(() => {
+    if (!isNaN(date["$y"]) && !isNaN(outDate["$y"])) {
+      const timeDifference = Math.abs(outDate["$d"] - date["$d"]);
+      const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+      const totalPrice = values["price_per_night"] * daysDifference;
+
+      setTotalPrice(totalPrice);
+    }
+  }, [date, outDate, values["price_per_night"]]);
+
   return (
     <Box component="form" noValidate onSubmit={handleSubmit}>
       <Grid container spacing={2}>
@@ -102,15 +114,9 @@ export default function FormReservations({
               value={date}
               minDate={today}
               onChange={(newDate) => {
-                setDate(newDate);
-                if (
-                  date > outDate ||
-                  date["$d"].getTime() > outDate["$d"].getTime()
-                ) {
-                  setFieldError(
-                    "check_out_date",
-                    "La fecha de checkout debe ser mayor"
-                  );
+                if (outDate == null) {
+                  setFieldValue("check_in_date", "");
+                  setDate("");
                 } else {
                   const formatedMonth = `0${newDate["$M"] + 1}`.slice(-2);
                   const formatedDay = `0${newDate["$D"]}`.slice(-2);
@@ -118,21 +124,25 @@ export default function FormReservations({
                   const formatedMinutes = `0${newDate["$m"]}`.slice(-2);
                   const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}${formatedHour}:${formatedMinutes}:00`;
 
+                  setDate(newDate);
                   setFieldValue("check_in_date", formatedDate);
                 }
               }}
               renderInput={(params) => (
                 <TextField
                   {...params}
+                  name="check_in_date"
                   fullWidth
                   required
                   onKeyDown={handleKeyDown}
                   size="small"
                   onBlur={handleBlur}
-                  error={touched.check_in_date && Boolean(errors.check_in_date)}
+                  error={
+                    touched["check_in_date"] && Boolean(errors["check_in_date"])
+                  }
                   helperText={
-                    touched.check_in_date && Boolean(errors.check_in_date)
-                      ? errors.check_in_date
+                    touched["check_in_date"] && Boolean(errors["check_in_date"])
+                      ? errors["check_in_date"]
                       : " "
                   }
                 />
@@ -151,17 +161,11 @@ export default function FormReservations({
               views={["year", "month", "day", "hours", "minutes"]}
               format="DD-MM-YYYY"
               value={outDate}
-              minDate={today}
+              minDate={tomorrow}
               onChange={(newDate) => {
-                setOutDate(newDate);
-                if (
-                  date > outDate ||
-                  date["$d"].getTime() > outDate["$d"].getTime()
-                ) {
-                  setFieldError(
-                    "check_out_date",
-                    "La fecha de checkout debe ser mayor"
-                  );
+                if (outDate == null) {
+                  setFieldValue("check_out_date", "");
+                  setOutDate("");
                 } else {
                   const formatedMonth = `0${newDate["$M"] + 1}`.slice(-2);
                   const formatedDay = `0${newDate["$D"]}`.slice(-2);
@@ -169,21 +173,19 @@ export default function FormReservations({
                   const formatedMinutes = `0${newDate["$m"]}`.slice(-2);
                   const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}${formatedHour}:${formatedMinutes}:00`;
 
+                  setOutDate(newDate);
                   setFieldValue("check_out_date", formatedDate);
                 }
               }}
               renderInput={(params) => (
                 <TextField
                   {...params}
+                  name="check_out_date"
                   fullWidth
                   required
                   onKeyDown={handleKeyDown}
                   size="small"
-                  onBlur={(e) => {
-                    const value = (e.target.value || "").replace(/\s+/gi, " ");
-                    setFieldValue(e.target["check_out_date"], value.trim());
-                    handleBlur(e);
-                  }}
+                  onBlur={handleBlur}
                   error={
                     touched["check_out_date"] &&
                     Boolean(errors["check_out_date"])
@@ -199,18 +201,18 @@ export default function FormReservations({
             />
           </LocalizationProvider>
         </Grid>
-
         <Grid sm={3}>
           <TextField
             name="room_id"
             label="Asignar habitación"
+            inputProps={{ style: { textAlign: "center" } }}
             fullWidth
             size="small"
             value={values["room_id"]}
             onChange={handleChange}
             onBlur={(e) => {
               const value = (e.target.value || "").replace(/\s+/gi, " ");
-              setFieldValue(e.target["room_id"], value.trim());
+              setFieldValue(e.target.name, value.trim());
               handleBlur(e);
             }}
             error={touched["room_id"] && Boolean(errors["room_id"])}
@@ -225,14 +227,14 @@ export default function FormReservations({
           <TextField
             name="price_per_night"
             label="Precio por noche"
-            required
+            inputProps={{ style: { textAlign: "center" } }}
             fullWidth
             size="small"
             value={values["price_per_night"]}
             onChange={handleChange}
             onBlur={(e) => {
               const value = (e.target.value || "").replace(/\s+/gi, " ");
-              setFieldValue(e.target["price_per_night"], value.trim());
+              setFieldValue(e.target.name, value.trim());
               handleBlur(e);
             }}
             error={
@@ -249,14 +251,14 @@ export default function FormReservations({
           <TextField
             name="number_of_guests"
             label="Número de húespedes"
-            required
+            inputProps={{ style: { textAlign: "center" } }}
             fullWidth
             size="small"
             value={values["number_of_guests"]}
             onChange={handleChange}
             onBlur={(e) => {
               const value = (e.target.value || "").replace(/\s+/gi, " ");
-              setFieldValue(e.target["number_of_guests"], value.trim());
+              setFieldValue(e.target.name, value.trim());
               handleBlur(e);
             }}
             error={
@@ -269,7 +271,17 @@ export default function FormReservations({
             }
           />
         </Grid>
-        <Grid sm={3}></Grid>
+        <Grid sm={3}>
+          <TextField
+            name="total_price"
+            label="Precio total"
+            inputProps={{ style: { textAlign: "center" } }}
+            fullWidth
+            disabled
+            size="small"
+            value={totalPrice ? `$ ${totalPrice}` : ""}
+          />
+        </Grid>
       </Grid>
       <Divider sx={{ mt: 5, mb: 5 }} />
       <Box display="flex" justifyContent="flex-end">
@@ -280,9 +292,6 @@ export default function FormReservations({
           color="secondary"
           variant="contained"
           type="submit"
-          onClick={() => {
-            if (!errors) setOpenDialog(true);
-          }}
           sx={{ ml: 2 }}
         >
           Crear
@@ -292,7 +301,7 @@ export default function FormReservations({
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}
         title="¿Quieres crear la siguiente reserva?"
-        content={values}
+        content={{ ...values, totalPrice }}
         styles={styles}
       />
     </Box>

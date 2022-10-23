@@ -23,10 +23,6 @@ export default function ResponsiveDialog({
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const JSONPrettyMon = require("react-json-pretty/dist/monikai");
 
-  const handleOpen = () => {
-    setOpenDialog(true);
-  };
-
   const handleClose = () => {
     setOpenDialog(false);
   };
