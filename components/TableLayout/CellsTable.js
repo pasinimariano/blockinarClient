@@ -20,6 +20,12 @@ export function CellsTableAllRooms({ room }) {
 
 export function CellsTableDayReservation({ reservation, Context }) {
   const context = useContext(Context);
+  const bookingStatus = {
+    confirmed: "#00C851",
+    in_house: "#9933CC",
+    cancelled: "#CC0000",
+    checked_out: "#0099CC",
+  };
 
   const handleClick = () => {
     context.setModalShow(true);
@@ -32,10 +38,7 @@ export function CellsTableDayReservation({ reservation, Context }) {
       <TableCell
         align="center"
         style={{
-          color:
-            reservation["booking_status"] === "confirmed"
-              ? "#00C851"
-              : "#0099CC",
+          color: bookingStatus[reservation["booking_status"]],
         }}
       >
         {reservation["booking_status"].toUpperCase()}
