@@ -6,10 +6,11 @@ import { validationSchema } from "../../../schemas/SchemaCreateReservation";
 
 import FormReservations from "../Forms/FormReservations";
 
-export default function BodyCreateReservation({
+export default function BodyEditReservation({
   handleClose,
   allRooms,
   modalBody,
+  prevData,
   styles,
 }) {
   const [openDialog, setOpenDialog] = useState(false);
@@ -34,7 +35,7 @@ export default function BodyCreateReservation({
         >
           <Typography className="titleDetail"> - </Typography>
           <Typography className={styles.tableTitleWhite}>
-            CREAR NUEVA RESERVA
+            EDITAR RESERVA
           </Typography>
           <Typography className="titleDetail"> - </Typography>
         </Box>

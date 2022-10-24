@@ -78,4 +78,9 @@ export const columnsDayReservations = [
     align: "center",
     maxSize: "1500px",
   },
+  {
+    id: "edit_reservation",
+    label: "",
+    align: "center",
+  },
 ];

@@ -30,6 +30,8 @@ export default function FormReservations({
   handleClose,
   openDialog,
   setOpenDialog,
+  allRooms,
+  modalBody,
   styles,
 }) {
   const [date, setDate] = useState(dayjs(null));
@@ -205,23 +207,35 @@ export default function FormReservations({
           <TextField
             name="room_id"
             label="Asignar habitación"
-            inputProps={{ style: { textAlign: "center" } }}
             fullWidth
+            select
             size="small"
             value={values["room_id"]}
-            onChange={handleChange}
-            onBlur={(e) => {
-              const value = (e.target.value || "").replace(/\s+/gi, " ");
-              setFieldValue(e.target.name, value.trim());
-              handleBlur(e);
+            onChange={(option) => {
+              setFieldValue("room_id", option.target.value);
             }}
+            onBlur={handleBlur}
             error={touched["room_id"] && Boolean(errors["room_id"])}
             helperText={
               touched["room_id"] && Boolean(errors["room_id"])
                 ? errors["room_id"]
                 : " "
             }
-          />
+          >
+            {allRooms &&
+              allRooms.map((room) => (
+                <MenuItem
+                  key={room.id}
+                  value={room.id}
+                  style={
+                    room.occupancy === 1 ? { color: "red" } : { color: "green" }
+                  }
+                  disabled={room.occupancy === 1 ? true : false}
+                >
+                  {room.id}
+                </MenuItem>
+              ))}
+          </TextField>
         </Grid>
         <Grid sm={3}>
           <TextField
@@ -294,7 +308,7 @@ export default function FormReservations({
           type="submit"
           sx={{ ml: 2 }}
         >
-          Crear
+          {modalBody === "create" ? "Crear" : "Editar"}
         </Button>
       </Box>
       <ResponsiveDialog
