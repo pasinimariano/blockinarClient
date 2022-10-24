@@ -91,3 +91,16 @@ a {
   font-weight: bolder;
   color: var(--green)
 }
+
+.modalLayout {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  min-width: 50vw;
+  background-color: var(--gray);
+  border: 1.5px solid #78909c;
+  border-radius: 16px;
+  box-shadow: 24;
+  padding: 30px;
+}

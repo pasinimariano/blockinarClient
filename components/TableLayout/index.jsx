@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   Container,
   Paper,
@@ -8,12 +8,18 @@ import {
   TableHead,
   TablePagination,
   TableRow,
-  Typography,
 } from "@mui/material";
 
 import { CellsTableAllRooms, CellsTableDayReservation } from "./CellsTable";
 
-export default function TableLayout({ data, columns, cells, Headers, styles }) {
+export default function TableLayout({
+  Context,
+  data,
+  columns,
+  cells,
+  Headers,
+  styles,
+}) {
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
@@ -58,8 +64,9 @@ export default function TableLayout({ data, columns, cells, Headers, styles }) {
                   .map((reservation) => {
                     return (
                       <CellsTableDayReservation
-                        reservation={reservation}
                         key={reservation.id}
+                        Context={Context}
+                        reservation={reservation}
                       />
                     );
                   })}

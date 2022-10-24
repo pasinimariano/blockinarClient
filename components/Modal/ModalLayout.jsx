@@ -1,42 +1,50 @@
-import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Modal from "@mui/material/Modal";
+import { useContext } from "react";
+import { Box, Button, Modal } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
-const style = {
-  position: "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  minWidth: "50vw",
-  bgcolor: "background.paper",
-  border: "1.5px solid #78909c",
-  borderRadius: "16px",
-  boxShadow: 24,
-  p: 5,
-};
-
 export default function ModalLayout({
-  modalShow,
-  setModalShow,
-  selectedBody,
-  Body,
+  Context,
+  allRooms,
+  BodyCreate,
+  BodyEdit,
+  reservation,
   refreshData,
   handleOpenSnackBar,
   goTo,
   styles,
 }) {
+  const context = useContext(Context);
+
   const handleClose = (event) => {
     event.preventDefault();
 
-    setModalShow(false);
+    context.setModalShow(false);
+    context.setModalBody("");
+    context.setReservationForEdit(null);
   };
 
   return (
     <div>
-      <Modal open={modalShow} onClose={handleClose}>
-        <Box sx={style}>
-          <Body styles={styles} handleClose={handleClose} />
+      <Modal open={context.modalShow} onClose={handleClose}>
+        <Box className="modalLayout">
+          {context.modalBody === "create" ? (
+            <BodyCreate
+              context={context}
+              handleClose={handleClose}
+              allRooms={allRooms}
+              modalBody={context.modalBody}
+              styles={styles}
+            />
+          ) : (
+            <BodyEdit
+              context={context}
+              handleClose={handleClose}
+              allRooms={allRooms}
+              modalBody={context.modalBody}
+              reservation={reservation}
+              styles={styles}
+            />
+          )}
           <Button
             sx={{ position: "absolute", top: 2, right: 2 }}
             onClick={handleClose}

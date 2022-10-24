@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
@@ -9,6 +9,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export default function ControlsDayReservation({
+  Context,
   currentDay,
   allRooms,
   dayReservations,
@@ -16,13 +17,13 @@ export default function ControlsDayReservation({
   setDaySelected,
   setDayForGetData,
   setFilterReservations,
-  setModalShow,
   styles,
 }) {
   const [date, setDate] = useState(dayjs(currentDay));
   const [allCategories, setAllCategories] = useState([]);
   const [roomsWithCat, setRoomsWithCat] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const context = useContext(Context);
 
   const handleKeyDown = (event) => {
     event.preventDefault();
@@ -159,7 +160,10 @@ export default function ControlsDayReservation({
         <Button
           variant="contained"
           color="secondary"
-          onClick={() => setModalShow(true)}
+          onClick={() => {
+            context.setModalShow(true);
+            context.setModalBody("create");
+          }}
         >
           Crear reserva
         </Button>

@@ -6,7 +6,13 @@ import { validationSchema } from "../../../schemas/SchemaCreateReservation";
 
 import FormReservations from "../Forms/FormReservations";
 
-export default function BodyCreateReservation({ handleClose, styles }) {
+export default function BodyCreateReservation({
+  context,
+  handleClose,
+  allRooms,
+  modalBody,
+  styles,
+}) {
   const [openDialog, setOpenDialog] = useState(false);
   const initialValues = {
     first_name: "",
@@ -49,6 +55,7 @@ export default function BodyCreateReservation({ handleClose, styles }) {
             setFieldValue,
           }) => (
             <FormReservations
+              context={context}
               handleSubmit={handleSubmit}
               handleChange={handleChange}
               handleBlur={handleBlur}
@@ -60,6 +67,8 @@ export default function BodyCreateReservation({ handleClose, styles }) {
               handleClose={handleClose}
               openDialog={openDialog}
               setOpenDialog={setOpenDialog}
+              allRooms={allRooms}
+              modalBody={modalBody}
               styles={styles}
             />
           )}
