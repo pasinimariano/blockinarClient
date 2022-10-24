@@ -36,6 +36,7 @@ export default function ModalLayout({
             />
           ) : (
             <BodyEdit
+              context={context}
               handleClose={handleClose}
               allRooms={allRooms}
               modalBody={context.modalBody}

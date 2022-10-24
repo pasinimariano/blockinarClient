@@ -1,12 +1,14 @@
-import { useState } from "react";
-import { Box, Typography } from "@mui/material";
+import { useState, useEffect } from "react";
+import { Box, Typography, Container, CircularProgress } from "@mui/material";
 import { Formik } from "formik";
 
+import getAllData from "../../../utils/getAllData";
 import { validationSchema } from "../../../schemas/SchemaCreateReservation";
 
 import FormReservations from "../Forms/FormReservations";
 
 export default function BodyEditReservation({
+  context,
   handleClose,
   allRooms,
   modalBody,
@@ -14,15 +16,14 @@ export default function BodyEditReservation({
   styles,
 }) {
   const [openDialog, setOpenDialog] = useState(false);
-  const initialValues = {
-    first_name: "",
-    last_name: "",
-    check_in_date: "",
-    check_out_date: "",
-    room_id: "",
-    price_per_night: "",
-    number_of_guests: "",
-  };
+  const [reservation, setReservation] = useState(null);
+
+  useEffect(() => {
+    const url = process.env.GET_RESERVATIONBYID_URL;
+    const id = context.reservationForEdit;
+    const urlReservationsById = `${url}${id}`;
+    getAllData(setReservation, urlReservationsById);
+  }, []);
 
   return (
     <Box>
@@ -39,39 +40,45 @@ export default function BodyEditReservation({
           </Typography>
           <Typography className="titleDetail"> - </Typography>
         </Box>
-        <Formik
-          validationSchema={validationSchema}
-          onSubmit={() => setOpenDialog(true)}
-          initialValues={initialValues}
-        >
-          {({
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            values,
-            touched,
-            errors,
-            isSubmitting,
-            setFieldValue,
-          }) => (
-            <FormReservations
-              handleSubmit={handleSubmit}
-              handleChange={handleChange}
-              handleBlur={handleBlur}
-              values={values}
-              touched={touched}
-              errors={errors}
-              isSubmitting={isSubmitting}
-              setFieldValue={setFieldValue}
-              handleClose={handleClose}
-              openDialog={openDialog}
-              setOpenDialog={setOpenDialog}
-              allRooms={allRooms}
-              modalBody={modalBody}
-              styles={styles}
-            />
-          )}
-        </Formik>
+        {!reservation ? (
+          <Container className={styles.tableContainer}>
+            <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
+          </Container>
+        ) : (
+          <Formik
+            validationSchema={validationSchema}
+            onSubmit={() => setOpenDialog(true)}
+            initialValues={reservation}
+          >
+            {({
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              values,
+              touched,
+              errors,
+              isSubmitting,
+              setFieldValue,
+            }) => (
+              <FormReservations
+                handleSubmit={handleSubmit}
+                handleChange={handleChange}
+                handleBlur={handleBlur}
+                values={values}
+                touched={touched}
+                errors={errors}
+                isSubmitting={isSubmitting}
+                setFieldValue={setFieldValue}
+                handleClose={handleClose}
+                openDialog={openDialog}
+                setOpenDialog={setOpenDialog}
+                allRooms={allRooms}
+                modalBody={modalBody}
+                styles={styles}
+              />
+            )}
+          </Formik>
+        )}
       </Box>
     </Box>
   );
