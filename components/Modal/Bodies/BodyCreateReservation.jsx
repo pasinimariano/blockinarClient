@@ -7,6 +7,7 @@ import { validationSchema } from "../../../schemas/SchemaCreateReservation";
 import FormReservations from "../Forms/FormReservations";
 
 export default function BodyCreateReservation({
+  context,
   handleClose,
   allRooms,
   modalBody,
@@ -54,6 +55,7 @@ export default function BodyCreateReservation({
             setFieldValue,
           }) => (
             <FormReservations
+              context={context}
               handleSubmit={handleSubmit}
               handleChange={handleChange}
               handleBlur={handleBlur}

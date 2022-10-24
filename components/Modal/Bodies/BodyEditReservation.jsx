@@ -61,6 +61,7 @@ export default function BodyEditReservation({
               setFieldValue,
             }) => (
               <FormReservations
+                context={context}
                 handleSubmit={handleSubmit}
                 handleChange={handleChange}
                 handleBlur={handleBlur}

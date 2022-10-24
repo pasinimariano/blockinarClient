@@ -4,11 +4,11 @@ import {
   TextField,
   MenuItem,
   Button,
-  CirculasProgress,
   Divider,
-  FormGroup,
-  Container,
+  InputAdornment,
 } from "@mui/material";
+import AttachMoneyIcon from "@mui/icons-material/AttachMoney";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -19,6 +19,7 @@ import "dayjs/locale/es-mx";
 import ResponsiveDialog from "../../Dialogs/ResponsiveDialog";
 
 export default function FormReservations({
+  context,
   handleSubmit,
   handleChange,
   handleBlur,
@@ -37,6 +38,12 @@ export default function FormReservations({
   const [date, setDate] = useState(dayjs(null));
   const [outDate, setOutDate] = useState(dayjs(null));
   const [totalPrice, setTotalPrice] = useState(null);
+  const bookingStatus = [
+    { status: "confirmed", color: "#00C851", value: "confirmed" },
+    { status: "in house", color: "#9933CC", value: "in_house" },
+    { status: "cancelled", color: "#CC0000", value: "cancelled" },
+    { status: "checked out", color: "#0099CC", value: "checked_out" },
+  ];
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -45,20 +52,82 @@ export default function FormReservations({
     event.preventDefault();
   };
 
-  useEffect(() => {
-    if (!isNaN(date["$y"]) && !isNaN(outDate["$y"])) {
-      const timeDifference = Math.abs(outDate["$d"] - date["$d"]);
-      const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+  const themeDisabled = createTheme({
+    palette: {
+      text: {
+        disabled: "black",
+      },
+    },
+  });
 
+  useEffect(() => {
+    if ((!isNaN(date["$y"]) && !isNaN(outDate["$y"])) || (date && outDate)) {
+      const timeDifference = Math.abs(outDate - date);
+      const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
       const totalPrice = values["price_per_night"] * daysDifference;
 
       setTotalPrice(totalPrice);
     }
   }, [date, outDate, values["price_per_night"]]);
 
+  useEffect(() => {
+    if (context.modalBody === "edit" && values) {
+      const checkInDate = new Date(values["check_in_date"]);
+      const checkOutDate = new Date(values["check_out_date"]);
+      const timeDifference = Math.abs(checkOutDate - checkInDate);
+      const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
+
+      const totalPrice = values["price_per_night"] * daysDifference;
+
+      setDate(checkInDate);
+      setOutDate(checkOutDate);
+      setTotalPrice(totalPrice);
+    }
+  }, []);
+
   return (
     <Box component="form" noValidate onSubmit={handleSubmit}>
       <Grid container spacing={2}>
+        {context.modalBody === "edit" ? (
+          <>
+            <Grid sm={4}></Grid>
+            <Grid sm={4}>
+              <TextField
+                name="booking_status"
+                label="Estado"
+                fullWidth
+                required
+                select
+                size="small"
+                value={values["booking_status"]}
+                onChange={(option) => {
+                  console.log(option);
+                  setFieldValue("booking_status", option.target.value);
+                }}
+                onBlur={handleBlur}
+                error={
+                  touched["booking_status"] && Boolean(errors["booking_status"])
+                }
+                helperText={
+                  touched["booking_status"] && Boolean(errors["booking_status"])
+                    ? errors["booking_status"]
+                    : " "
+                }
+              >
+                {bookingStatus.map((status) => (
+                  <MenuItem
+                    key={status.value}
+                    value={status.value}
+                    style={{ color: status.color }}
+                  >
+                    {status.status}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Grid>
+            <Grid sm={4}></Grid>
+          </>
+        ) : null}
         <Grid sm={12} md={6}>
           <TextField
             name="first_name"
@@ -126,7 +195,7 @@ export default function FormReservations({
                   const formatedMinutes = `0${newDate["$m"]}`.slice(-2);
                   const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}${formatedHour}:${formatedMinutes}:00`;
 
-                  setDate(newDate);
+                  setDate(newDate["$d"]);
                   setFieldValue("check_in_date", formatedDate);
                 }
               }}
@@ -175,7 +244,7 @@ export default function FormReservations({
                   const formatedMinutes = `0${newDate["$m"]}`.slice(-2);
                   const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}${formatedHour}:${formatedMinutes}:00`;
 
-                  setOutDate(newDate);
+                  setOutDate(newDate["$d"]);
                   setFieldValue("check_out_date", formatedDate);
                 }
               }}
@@ -206,7 +275,7 @@ export default function FormReservations({
         <Grid sm={3}>
           <TextField
             name="room_id"
-            label="Asignar habitación"
+            label={values["room_id"] ? "Habitación" : "Asignar habitación"}
             fullWidth
             select
             size="small"
@@ -241,6 +310,13 @@ export default function FormReservations({
           <TextField
             name="price_per_night"
             label="Precio por noche"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <AttachMoneyIcon fontSize="medium" />
+                </InputAdornment>
+              ),
+            }}
             inputProps={{ style: { textAlign: "center" } }}
             fullWidth
             size="small"
@@ -286,15 +362,24 @@ export default function FormReservations({
           />
         </Grid>
         <Grid sm={3}>
-          <TextField
-            name="total_price"
-            label="Precio total"
-            inputProps={{ style: { textAlign: "center" } }}
-            fullWidth
-            disabled
-            size="small"
-            value={totalPrice ? `$ ${totalPrice}` : ""}
-          />
+          <ThemeProvider theme={themeDisabled}>
+            <TextField
+              name="total_price"
+              label="Precio total"
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <AttachMoneyIcon fontSize="medium" />
+                  </InputAdornment>
+                ),
+              }}
+              inputProps={{ style: { textAlign: "center" } }}
+              fullWidth
+              disabled
+              size="small"
+              value={totalPrice ? totalPrice : ""}
+            />
+          </ThemeProvider>
         </Grid>
       </Grid>
       <Divider sx={{ mt: 5, mb: 5 }} />
@@ -314,7 +399,12 @@ export default function FormReservations({
       <ResponsiveDialog
         openDialog={openDialog}
         setOpenDialog={setOpenDialog}
-        title="¿Quieres crear la siguiente reserva?"
+        isSubmitting={isSubmitting}
+        title={
+          context.modalBody === "edit"
+            ? "¿Quieres editar la reserva?"
+            : "¿Quieres crear la siguiente reserva?"
+        }
         content={{ ...values, totalPrice }}
         styles={styles}
       />

@@ -24,7 +24,7 @@ export function CellsTableDayReservation({ reservation, Context }) {
   const handleClick = () => {
     context.setModalShow(true);
     context.setModalBody("edit");
-    context.setReservationForEdit(reservation["room_id"]);
+    context.setReservationForEdit(reservation["id"]);
   };
 
   return (

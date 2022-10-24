@@ -29,6 +29,7 @@ export default function ModalLayout({
         <Box className="modalLayout">
           {context.modalBody === "create" ? (
             <BodyCreate
+              context={context}
               handleClose={handleClose}
               allRooms={allRooms}
               modalBody={context.modalBody}
