@@ -108,7 +108,7 @@ export default function ChartOfTheMonth({ allReservations }) {
         options={config}
         series={series}
         type="line"
-        height={350}
+        height={400}
       />
     </div>
   );

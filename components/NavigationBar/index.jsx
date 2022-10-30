@@ -22,8 +22,8 @@ export default function NavigationBar() {
                 onClick={() => linkTo("/home", router)}
                 style={
                   pathname === "/home"
-                    ? { color: "#00ff99ff" }
-                    : { color: "#ffffffff" }
+                    ? { color: "#00ff99ff", cursor: "pointer" }
+                    : { color: "#ffffffff", cursor: "pointer" }
                 }
               />
             </Tooltip>
@@ -32,15 +32,27 @@ export default function NavigationBar() {
                 onClick={() => linkTo("/charts", router)}
                 style={
                   pathname === "/charts"
-                    ? { color: "#00ff99ff", marginLeft: "10px" }
-                    : { color: "#ffffffff", marginLeft: "10px" }
+                    ? {
+                        color: "#00ff99ff",
+                        marginLeft: "10px",
+                        cursor: "pointer",
+                      }
+                    : {
+                        color: "#ffffffff",
+                        marginLeft: "10px",
+                        cursor: "pointer",
+                      }
                 }
               />
             </Tooltip>
             <Tooltip title="Cerrar sesión">
               <ExitToAppRoundedIcon
                 onClick={() => linkTo("/", router)}
-                style={{ color: "#ffffffff", marginLeft: "10px" }}
+                style={{
+                  color: "#ffffffff",
+                  marginLeft: "10px",
+                  cursor: "pointer",
+                }}
               />
             </Tooltip>
           </Box>
