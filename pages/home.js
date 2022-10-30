@@ -1,4 +1,5 @@
-import createContext, { useEffect, useState } from "react";
+import Head from "next/head";
+import { useEffect, useState } from "react";
 import { Box, CircularProgress, Container } from "@mui/material";
 import moment from "moment";
 
@@ -28,7 +29,6 @@ export default function Home() {
   const [daySelected, setDaySelected] = useState();
   const [dayForGetData, setDayForGetData] = useState(false);
   const [filterReservations, setFilterReservations] = useState(null);
-  const [reservationSelected, setReservationSelected] = useState(null);
   const [modalShow, setModalShow] = useState(false);
   const [modalBody, setModalBody] = useState("");
   const [reservationForEdit, setReservationForEdit] = useState(null);
@@ -66,6 +66,9 @@ export default function Home() {
         setReservationForEdit,
       }}
     >
+      <Head>
+        <title> Gaia hoteles </title>
+      </Head>
       <Box>
         <NavigationBar styles={styles} />
         <Container maxWidth={false} className="layout1">
@@ -136,7 +139,6 @@ export default function Home() {
           allRooms={allRooms}
           BodyCreate={BodyCreateReservation}
           BodyEdit={BodyEditReservation}
-          reservation={reservationSelected}
           styles={styles}
         />
       </Box>

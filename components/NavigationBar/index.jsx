@@ -29,9 +29,9 @@ export default function NavigationBar() {
             </Tooltip>
             <Tooltip title="Gráficos">
               <TimelineRoundedIcon
-                onClick={() => linkTo("/graphs", router)}
+                onClick={() => linkTo("/charts", router)}
                 style={
-                  pathname === "/graphs"
+                  pathname === "/charts"
                     ? { color: "#00ff99ff", marginLeft: "10px" }
                     : { color: "#ffffffff", marginLeft: "10px" }
                 }
