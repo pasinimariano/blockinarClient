@@ -100,7 +100,7 @@ export default function AverangeCostOfRooms({ averangeCost }) {
 
   useEffect(() => {
     getAverageOfRooms();
-  }, []);
+  }, [averangeCost]);
 
   return (
     <div id="chart">

@@ -1,20 +1,23 @@
 import Head from "next/head";
 import { useState, useEffect } from "react";
-import { Box, Container, CircularProgress } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import moment from "moment";
 
 import getAllData from "../utils/getAllData";
+import getDatesBetweenTwo from "../utils/getDatesBetweenTwo";
 import NavigationBar from "../components/NavigationBar";
 import ChartOfTheMonth from "../components/Charts/OfTheMonth";
 import ChartRoomsOccupancy from "../components/Charts/RoomsOccupancy";
 import AverangeCostOfRooms from "../components/Charts/AverageCostOfRooms";
+import RevenueChart from "../components/Charts/Revenue";
 
 export default function Graphs() {
   const [allReservations, setAllReservations] = useState(null);
   const [allRooms, setAllRooms] = useState(null);
   const [reservationsOfTheMonth, setReservationsOfTheMonth] = useState({});
   const [averangeCost, setAverangeCost] = useState({});
+  const [revenue, setRevenue] = useState({});
   const currentMonth = `0${moment().month() + 1}`.slice(-2);
 
   const urlAllReservations = process.env.GET_ALL_RESERVATIONS;
@@ -23,6 +26,7 @@ export default function Graphs() {
   const getReservationsOfTheMont = () => {
     if (allReservations) {
       const costRooms = {};
+      const getRevenue = {};
       allReservations.map((reservation) => {
         const day = Number(reservation["check_in_date"].slice(8, 10));
         const month = reservation["check_in_date"].slice(5, 7);
@@ -45,6 +49,22 @@ export default function Graphs() {
               }
             : { total: reservation["price_per_night"], count: 1 };
         }
+
+        if (reservation["booking_status"] === "confirmed") {
+          const dates = getDatesBetweenTwo(
+            reservation["check_in_date"],
+            reservation["check_out_date"]
+          );
+
+          dates.map((date) => {
+            const key = `${date.getMonth() + 1}`;
+            getRevenue[key] = getRevenue[key]
+              ? (getRevenue[key] += reservation["price_per_night"])
+              : reservation["price_per_night"];
+          });
+
+          setRevenue(getRevenue);
+        }
       });
 
       setAverangeCost(costRooms);
@@ -59,7 +79,7 @@ export default function Graphs() {
   useEffect(() => {
     getReservationsOfTheMont();
   }, [allReservations]);
-  console.log(averangeCost);
+
   return (
     <div>
       <Head>
@@ -68,38 +88,54 @@ export default function Graphs() {
       <main>
         <NavigationBar />
 
-        {!allRooms || !allReservations ? (
-          <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
-        ) : (
-          <Box
-            sx={{ width: "100%" }}
-            display="flex"
-            flexDirection="column"
-            justifyContent="center"
-          >
-            <Box className="layout1">
-              <Grid container sx={{ mt: 5, width: "100%" }}>
-                <Grid sm={12} lg={9}>
+        <Box
+          sx={{ width: "100%" }}
+          display="flex"
+          flexDirection="column"
+          justifyContent="center"
+        >
+          <Box className="layout1">
+            <Grid container sx={{ mt: 5, width: "100%" }}>
+              <Grid sm={12} lg={9}>
+                {!reservationsOfTheMonth.lenght === 0 ? (
+                  <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
+                ) : (
                   <ChartOfTheMonth
                     reservationsOfTheMonth={reservationsOfTheMonth}
                     setReservationsOfTheMonth={setReservationsOfTheMonth}
                   />
-                </Grid>
-                <Grid sm={12} lg={3}>
-                  <ChartRoomsOccupancy allRooms={allRooms} />
-                </Grid>
+                )}
               </Grid>
-            </Box>
-            <Box className="layout2">
-              <Grid container sx={{ mt: 5, width: "100%" }}>
-                <Grid sm={2}></Grid>
+              <Grid sm={12} lg={3}>
+                <ChartRoomsOccupancy allRooms={allRooms} />
+              </Grid>
+            </Grid>
+          </Box>
+          <Box className="layout2">
+            <Grid container sx={{ mt: 5, width: "100%" }}>
+              <Grid sm={2}></Grid>
+              {!averangeCost.lenght === 0 ? (
+                <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
+              ) : (
                 <Grid sm={8}>
                   <AverangeCostOfRooms averangeCost={averangeCost} />
                 </Grid>
-              </Grid>
-            </Box>
+              )}
+            </Grid>
           </Box>
-        )}
+          <Box className="layout1">
+            <Grid container sx={{ mt: 5, width: "100%" }}>
+              <Grid sm={1}></Grid>
+              {!revenue.lenght === 0 ? (
+                <CircularProgress size={100} style={{ color: "#00ff99ff" }} />
+              ) : (
+                <Grid sm={10}>
+                  <RevenueChart revenue={revenue} />
+                </Grid>
+              )}
+            </Grid>
+          </Box>
+        </Box>
       </main>
     </div>
   );
