@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import { Container, Box, Typography, Tooltip } from "@mui/material";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import TimelineRoundedIcon from "@mui/icons-material/TimelineRounded";
+import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
 
 import linkTo from "../../utils/linkTo";
@@ -32,6 +33,24 @@ export default function NavigationBar() {
                 onClick={() => linkTo("/charts", router)}
                 style={
                   pathname === "/charts"
+                    ? {
+                        color: "#00ff99ff",
+                        marginLeft: "10px",
+                        cursor: "pointer",
+                      }
+                    : {
+                        color: "#ffffffff",
+                        marginLeft: "10px",
+                        cursor: "pointer",
+                      }
+                }
+              />
+            </Tooltip>
+            <Tooltip title="Settings">
+              <SettingsRoundedIcon
+                onClick={() => linkTo("/settings", router)}
+                style={
+                  pathname === "/settings"
                     ? {
                         color: "#00ff99ff",
                         marginLeft: "10px",

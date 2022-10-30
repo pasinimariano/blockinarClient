@@ -5,12 +5,12 @@ export const validationSchema = Yup.object().shape({
   first_name: Yup.string()
     .required("Campo requerido")
     .min(2, "Se requiere al menos dos caracteres")
-    .max(150, "Se acepta un máximo de 150 caracteres")
+    .max(60, "Se acepta un máximo de 60 caracteres")
     .matches(/^(?=.*[a-zA-Z ])/, "Solo se acepta texto"),
   last_name: Yup.string()
     .required("Campo requerido")
     .min(2, "Se requiere al menos dos caracteres")
-    .max(150, "Se acepta un máximo de 150 caracteres")
+    .max(60, "Se acepta un máximo de 60 caracteres")
     .matches(/^(?=.*[a-zA-Z ])/, "Solo se acepta texto"),
   check_in_date: Yup.date()
     .required("Campo requerido")
