@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import {
   Box,
   Dialog,
@@ -11,20 +12,44 @@ import {
 } from "@mui/material";
 import JSONPRETTY from "react-json-pretty";
 
+import createRecord from "../../utils/createRecord";
+
 export default function ResponsiveDialog({
   openDialog,
-  setOpenDialog,
   title,
   content,
-  handleSubmit,
+  body,
+  refreshData,
+  handleClose,
   styles,
 }) {
+  const router = useRouter();
+  const urlForCreateBooking = process.env.CREATE_RESERVATION_URL;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const JSONPrettyMon = require("react-json-pretty/dist/monikai");
 
-  const handleClose = () => {
-    setOpenDialog(false);
+  const handleSubmit = () => {
+    const params = {
+      first_name: content["first_name"],
+      last_name: content["last_name"],
+      check_in_date: content["check_in_date"],
+      check_out_date: content["check_out_date"],
+      room_id: content["room_id"],
+      price_per_night: content["price_per_night"],
+      number_of_guests: content["number_of_guests"],
+      status_id: content["status_id"] ? content["status_id"] : "",
+    };
+
+    if (body === "create") {
+      createRecord(
+        params,
+        refreshData,
+        handleClose,
+        urlForCreateBooking,
+        router
+      );
+    }
   };
 
   return (
@@ -61,7 +86,7 @@ export default function ResponsiveDialog({
           </Button>
           <Button
             autoFocus
-            onClick={() => console.log("hola")}
+            onClick={handleSubmit}
             color="secondary"
             variant="contained"
           >

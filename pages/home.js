@@ -39,6 +39,11 @@ export default function Home() {
   const urlAllRooms = process.env.GET_ALLROOMS_URL;
   const dayReservationsUrl = process.env.GET_DAYRESERVATIONS_URL;
 
+  const refreshData = () => {
+    const urlDayReservations = `${dayReservationsUrl}${dayForGetData}`;
+    getAllData(setDayReservations, "bookings", urlDayReservations, router);
+  };
+
   useEffect(() => {
     if (!allRooms) {
       getAllData(setAllRooms, "rooms", urlAllRooms, router);
@@ -146,6 +151,7 @@ export default function Home() {
           allRooms={allRooms}
           BodyCreate={BodyCreateReservation}
           BodyEdit={BodyEditReservation}
+          refreshData={refreshData}
           styles={styles}
         />
       </Box>

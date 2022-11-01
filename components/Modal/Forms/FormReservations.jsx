@@ -33,16 +33,17 @@ export default function FormReservations({
   setOpenDialog,
   allRooms,
   modalBody,
+  refreshData,
   styles,
 }) {
   const [date, setDate] = useState(dayjs(null));
   const [outDate, setOutDate] = useState(dayjs(null));
   const [totalPrice, setTotalPrice] = useState(null);
   const bookingStatus = [
-    { status: "confirmed", color: "#00C851", value: "confirmed" },
-    { status: "in house", color: "#9933CC", value: "in_house" },
-    { status: "cancelled", color: "#CC0000", value: "cancelled" },
-    { status: "checked out", color: "#0099CC", value: "checked_out" },
+    { status: "confirmed", color: "#00C851", value: "Confirmed" },
+    { status: "in house", color: "#9933CC", value: "In_house" },
+    { status: "cancelled", color: "#CC0000", value: "Cancelled" },
+    { status: "checked out", color: "#0099CC", value: "Checked_out" },
   ];
   const today = new Date();
   const tomorrow = new Date(today);
@@ -59,6 +60,12 @@ export default function FormReservations({
       },
     },
   });
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    context.setModalShow(false);
+    context.setModalBody("");
+  };
 
   useEffect(() => {
     if ((!isNaN(date["$y"]) && !isNaN(outDate["$y"])) || (date && outDate)) {
@@ -101,7 +108,6 @@ export default function FormReservations({
                 size="small"
                 value={values["booking_status"]}
                 onChange={(option) => {
-                  console.log(option);
                   setFieldValue("booking_status", option.target.value);
                 }}
                 onBlur={handleBlur}
@@ -398,7 +404,7 @@ export default function FormReservations({
       </Box>
       <ResponsiveDialog
         openDialog={openDialog}
-        setOpenDialog={setOpenDialog}
+        handleClose={handleCloseDialog}
         isSubmitting={isSubmitting}
         title={
           context.modalBody === "edit"
@@ -407,6 +413,8 @@ export default function FormReservations({
         }
         content={{ ...values, totalPrice }}
         styles={styles}
+        body={context.modalBody}
+        refreshData={refreshData}
       />
     </Box>
   );
