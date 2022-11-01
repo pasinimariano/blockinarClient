@@ -6,6 +6,7 @@ import SwalError from "./swalError";
 
 const getAllData = async (setter, object, url, router) => {
   const baseUrl = process.env.BASE_URL;
+
   try {
     const token = getToken();
 

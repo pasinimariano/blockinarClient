@@ -35,7 +35,11 @@ export const validationSchema = Yup.object().shape({
         check_in_date &&
         yup.min(check_in_date, "El check-out debe ser posterior al check_in")
     ),
-  room_id: Yup.string().matches(/^\d+$/, "Solo se admiten números"),
-  price_per_night: Yup.string().matches(/^\d+$/, "Solo se admiten números"),
-  number_of_guests: Yup.string().matches(/^\d+$/, "Solo se admiten números"),
+  room_id: Yup.string().matches(/^\d+$/, "Solo se admiten números").nullable(),
+  price_per_night: Yup.string()
+    .matches(/^\d+$/, "Solo se admiten números")
+    .nullable(),
+  number_of_guests: Yup.string()
+    .matches(/^\d+$/, "Solo se admiten números")
+    .nullable(),
 });

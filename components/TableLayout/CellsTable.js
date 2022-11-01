@@ -44,7 +44,7 @@ export function CellsTableDayReservation({ reservation, Context }) {
         {reservation["booking_status"]["booking_status"].toUpperCase()}
       </TableCell>
       <TableCell align="center">
-        {!reservation["room"] ? "-" : reservation["room"]["room_id"]}
+        {!reservation["room"] ? "-" : reservation["room"]["id"]}
       </TableCell>
       <TableCell align="center">{`${reservation["check_in_date"].slice(
         0,

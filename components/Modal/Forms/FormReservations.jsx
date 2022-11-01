@@ -40,10 +40,10 @@ export default function FormReservations({
   const [outDate, setOutDate] = useState(dayjs(null));
   const [totalPrice, setTotalPrice] = useState(null);
   const bookingStatus = [
-    { status: "confirmed", color: "#00C851", value: "Confirmed" },
-    { status: "in house", color: "#9933CC", value: "In_house" },
-    { status: "cancelled", color: "#CC0000", value: "Cancelled" },
-    { status: "checked out", color: "#0099CC", value: "Checked_out" },
+    { status: "Confirmed", color: "#00C851", value: "Confirmed" },
+    { status: "In house", color: "#9933CC", value: "In_house" },
+    { status: "Cancelled", color: "#CC0000", value: "Cancelled" },
+    { status: "Checked out", color: "#0099CC", value: "Checked_out" },
   ];
   const today = new Date();
   const tomorrow = new Date(today);
@@ -106,7 +106,7 @@ export default function FormReservations({
                 required
                 select
                 size="small"
-                value={values["booking_status"]}
+                value={values["booking_status"]["booking_status"]}
                 onChange={(option) => {
                   setFieldValue("booking_status", option.target.value);
                 }}
@@ -199,7 +199,7 @@ export default function FormReservations({
                   const formatedDay = `0${newDate["$D"]}`.slice(-2);
                   const formatedHour = `0${newDate["$H"]}`.slice(-2);
                   const formatedMinutes = `0${newDate["$m"]}`.slice(-2);
-                  const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}${formatedHour}:${formatedMinutes}:00`;
+                  const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}T${formatedHour}:${formatedMinutes}:00`;
 
                   setDate(newDate["$d"]);
                   setFieldValue("check_in_date", formatedDate);
@@ -248,7 +248,7 @@ export default function FormReservations({
                   const formatedDay = `0${newDate["$D"]}`.slice(-2);
                   const formatedHour = `0${newDate["$H"]}`.slice(-2);
                   const formatedMinutes = `0${newDate["$m"]}`.slice(-2);
-                  const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}${formatedHour}:${formatedMinutes}:00`;
+                  const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}T${formatedHour}:${formatedMinutes}:00`;
 
                   setOutDate(newDate["$d"]);
                   setFieldValue("check_out_date", formatedDate);
@@ -281,11 +281,11 @@ export default function FormReservations({
         <Grid sm={3}>
           <TextField
             name="room_id"
-            label={values["room_id"] ? "Habitación" : "Asignar habitación"}
+            label={values["room"] ? "Habitación" : "Asignar habitación"}
             fullWidth
             select
             size="small"
-            value={values["room_id"]}
+            value={values["room_id"] ? values["room_id"] : ""}
             onChange={(option) => {
               setFieldValue("room_id", option.target.value);
             }}
@@ -297,6 +297,7 @@ export default function FormReservations({
                 : " "
             }
           >
+            <MenuItem value=""></MenuItem>
             {allRooms &&
               allRooms.map((room) => (
                 <MenuItem
@@ -326,7 +327,7 @@ export default function FormReservations({
             inputProps={{ style: { textAlign: "center" } }}
             fullWidth
             size="small"
-            value={values["price_per_night"]}
+            value={!values["price_per_night"] ? "" : values["price_per_night"]}
             onChange={handleChange}
             onBlur={(e) => {
               const value = (e.target.value || "").replace(/\s+/gi, " ");
@@ -350,7 +351,9 @@ export default function FormReservations({
             inputProps={{ style: { textAlign: "center" } }}
             fullWidth
             size="small"
-            value={values["number_of_guests"]}
+            value={
+              !values["number_of_guests"] ? "" : values["number_of_guests"]
+            }
             onChange={handleChange}
             onBlur={(e) => {
               const value = (e.target.value || "").replace(/\s+/gi, " ");
