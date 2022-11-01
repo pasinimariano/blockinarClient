@@ -92,7 +92,6 @@ export default function Home() {
           <ControlsDayReservation
             Context={Context}
             currentDay={currentDay}
-            allRooms={allRooms}
             dayReservations={dayReservations}
             setDayReservations={setDayReservations}
             setDaySelected={setDaySelected}

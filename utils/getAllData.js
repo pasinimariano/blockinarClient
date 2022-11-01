@@ -23,6 +23,11 @@ const getAllData = async (setter, object, url, router) => {
           setter(res.data[object]);
         })
         .catch((error) => {
+          if (error.response.data === "Invalid request = Token is expired") {
+            localStorage.removeItem("access_token");
+            linkTo("/", router);
+            SwalError("Sesión vencida, vuelva a ingresar");
+          }
           SwalError(error.response.data);
         });
   } catch (error) {

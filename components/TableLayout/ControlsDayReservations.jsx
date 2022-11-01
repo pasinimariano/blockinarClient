@@ -1,4 +1,5 @@
 import { useState, useEffect, useContext } from "react";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
@@ -8,10 +9,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
+import getAllData from "../../utils/getAllData";
+
 export default function ControlsDayReservation({
   Context,
   currentDay,
-  allRooms,
   dayReservations,
   setDayReservations,
   setDaySelected,
@@ -21,9 +23,9 @@ export default function ControlsDayReservation({
 }) {
   const [date, setDate] = useState(dayjs(currentDay));
   const [allCategories, setAllCategories] = useState([]);
-  const [roomsWithCat, setRoomsWithCat] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("All");
   const context = useContext(Context);
+  const router = useRouter();
 
   const handleKeyDown = (event) => {
     event.preventDefault();
@@ -49,7 +51,7 @@ export default function ControlsDayReservation({
     if (dayReservations && selectedCategory !== "All") {
       const filteredData = dayReservations.filter((reservation) => {
         if (reservation["room"]) {
-          const roomCategory = roomsWithCat[reservation["room"]["id"]];
+          const roomCategory = reservation["room"]["category"]["id"];
           if (roomCategory === selectedCategory) return reservation;
         }
       });
@@ -60,24 +62,10 @@ export default function ControlsDayReservation({
   };
 
   useEffect(() => {
-    if (allRooms) {
-      const auxCategories = [];
-      allRooms.map((room) => {
-        const include = auxCategories.includes(
-          room["category"]["category_name"].toUpperCase()
-        );
+    const urlGetAllCategories = process.env.GET_ALL_CATEGORIES;
 
-        if (!include)
-          auxCategories.push(room["category"]["category_name"].toUpperCase());
-        setRoomsWithCat((prevState) => ({
-          ...prevState,
-          [room["id"]]: room["category"]["category_name"].toUpperCase(),
-        }));
-      });
-
-      setAllCategories(auxCategories);
-    }
-  }, [allRooms]);
+    getAllData(setAllCategories, "categories", urlGetAllCategories, router);
+  }, []);
 
   useEffect(() => {
     const filter = filterByCategory();
@@ -105,8 +93,8 @@ export default function ControlsDayReservation({
           {allCategories &&
             allCategories.map((category) => {
               return (
-                <MenuItem key={category} value={category}>
-                  {category}
+                <MenuItem key={category.id} value={category.id}>
+                  {category["category_name"]}
                 </MenuItem>
               );
             })}
