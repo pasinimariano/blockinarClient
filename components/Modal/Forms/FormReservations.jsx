@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import {
   Box,
   TextField,
@@ -17,6 +18,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
 
 import ResponsiveDialog from "../../Dialogs/ResponsiveDialog";
+import getAllData from "../../../utils/getAllData";
 
 export default function FormReservations({
   context,
@@ -36,15 +38,19 @@ export default function FormReservations({
   refreshData,
   styles,
 }) {
+  const router = useRouter();
   const [date, setDate] = useState(dayjs(null));
   const [outDate, setOutDate] = useState(dayjs(null));
   const [totalPrice, setTotalPrice] = useState(null);
-  const bookingStatus = [
-    { status: "Confirmed", color: "#00C851", value: "Confirmed" },
-    { status: "In house", color: "#9933CC", value: "In_house" },
-    { status: "Cancelled", color: "#CC0000", value: "Cancelled" },
-    { status: "Checked out", color: "#0099CC", value: "Checked_out" },
-  ];
+  const [bookingStatus, setBookingStatus] = useState(null);
+  const bookingStatusColors = {
+    Confirmed: "#2BBBAD",
+    In_house: "#9933CC",
+    Checked_in: "#00C851",
+    Cancelled: "#CC0000",
+    Checked_out: "#0099CC",
+  };
+
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -85,7 +91,9 @@ export default function FormReservations({
       const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
       const totalPrice = values["price_per_night"] * daysDifference;
+      const urlGetAllStatus = process.env.GET_ALL_STATUS_URL;
 
+      getAllData(setBookingStatus, "status", urlGetAllStatus, router);
       setDate(checkInDate);
       setOutDate(checkOutDate);
       setTotalPrice(totalPrice);
@@ -122,11 +130,13 @@ export default function FormReservations({
               >
                 {bookingStatus.map((status) => (
                   <MenuItem
-                    key={status.value}
-                    value={status.value}
-                    style={{ color: status.color }}
+                    key={status["id"]}
+                    value={status["id"]}
+                    style={{
+                      color: bookingStatusColors[status["booking_status"]],
+                    }}
                   >
-                    {status.status}
+                    {status["booking_status"]}
                   </MenuItem>
                 ))}
               </TextField>

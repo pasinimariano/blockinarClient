@@ -21,8 +21,9 @@ export function CellsTableAllRooms({ room }) {
 export function CellsTableDayReservation({ reservation, Context }) {
   const context = useContext(Context);
   const bookingStatus = {
-    Confirmed: "#00C851",
+    Confirmed: "#2BBBAD",
     In_house: "#9933CC",
+    Checked_in: "#00C851",
     Cancelled: "#CC0000",
     Checked_out: "#0099CC",
   };
