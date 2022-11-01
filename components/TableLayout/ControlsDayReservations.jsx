@@ -58,7 +58,7 @@ export default function ControlsDayReservation({
 
     return dayReservations;
   };
-  console.log(roomsWithCat);
+
   useEffect(() => {
     if (allRooms) {
       const auxCategories = [];
