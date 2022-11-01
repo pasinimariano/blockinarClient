@@ -62,12 +62,15 @@ export default function ControlsDayReservation({
     if (allRooms) {
       const auxCategories = [];
       allRooms.map((room) => {
-        const include = auxCategories.includes(room["category"]);
+        const include = auxCategories.includes(
+          room["category"]["category_name"].toUpperCase()
+        );
 
-        if (!include) auxCategories.push(room["category"]);
+        if (!include)
+          auxCategories.push(room["category"]["category_name"].toUpperCase());
         setRoomsWithCat((prevState) => ({
           ...prevState,
-          [room["id"]]: room["category"],
+          [room["id"]]: room["category"]["category_name"].toUpperCase(),
         }));
       });
 
@@ -144,7 +147,7 @@ export default function ControlsDayReservation({
             onChange={(newDate) => {
               const formatedMonth = `0${newDate["$M"] + 1}`.slice(-2);
               const formatedDay = `0${newDate["$D"]}`.slice(-2);
-              const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}23:00:00`;
+              const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}`;
 
               setDate(newDate);
               setDaySelected(`${formatedDay}/${formatedMonth}`);

@@ -3,6 +3,7 @@ import { Link } from "@mui/material";
 import { useRouter } from "next/router";
 
 import TopBar from "../components/LandingPage/TopBar";
+import LoginForm from "../components/LandingPage/LoginForm";
 
 import linkTo from "../utils/linkTo";
 import styles from "../styles/landing.module.css";
@@ -19,15 +20,7 @@ export default function Home() {
 
       <main>
         <TopBar styles={styles} />
-        <Link
-          className="links"
-          underline="none"
-          onClick={() => {
-            linkTo("/home", router);
-          }}
-        >
-          Ingresar
-        </Link>
+        <LoginForm styles={styles} />
       </main>
     </div>
   );

@@ -1,15 +1,30 @@
 import axios from "axios";
 
+import { getToken } from "./securityService";
+import linkTo from "./linkTo";
 import SwalError from "./swalError";
 
-const getAllData = async (setter, url) => {
+const getAllData = async (setter, object, url, router) => {
   const baseUrl = process.env.BASE_URL;
   try {
-    await axios
-      .get(`${baseUrl}${url}`)
-      .then((json) => setter(json.data))
-      .catch((error) => SwalError(error.response.data.message));
-  } catch {
+    const token = getToken();
+
+    if (token === "TokenInsexistente") {
+      localStorage.removeItem("access_token");
+      linkTo("/", router);
+      SwalError("Sesión vencida, vuelva a ingresar");
+    } else
+      await axios
+        .get(`${baseUrl}${url}`, { headers: { token: token } })
+        .then((res) => {
+          const token = res.data.token;
+          localStorage.setItem("access_token", JSON.stringify(token));
+          setter(res.data[object]);
+        })
+        .catch((error) => {
+          SwalError(error.response.data);
+        });
+  } catch (error) {
     SwalError("Ha ocurrido un error en la comunicación");
   }
 };

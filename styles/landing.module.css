@@ -29,3 +29,24 @@
   font-family: Lato;
 }
 
+.mainContainer {
+  height: 75vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.titleFormContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.titleForm {
+  font-size: 25px;
+  margin: 20px;
+  line-height: 1.125;
+  font-family: Lato;
+}
+
