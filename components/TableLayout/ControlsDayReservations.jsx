@@ -48,16 +48,17 @@ export default function ControlsDayReservation({
   const filterByCategory = () => {
     if (dayReservations && selectedCategory !== "All") {
       const filteredData = dayReservations.filter((reservation) => {
-        const roomCategory = roomsWithCat[reservation["room_id"]];
-
-        if (roomCategory === selectedCategory) return reservation;
+        if (reservation["room"]) {
+          const roomCategory = roomsWithCat[reservation["room"]["id"]];
+          if (roomCategory === selectedCategory) return reservation;
+        }
       });
       return filteredData;
     }
 
     return dayReservations;
   };
-
+  console.log(roomsWithCat);
   useEffect(() => {
     if (allRooms) {
       const auxCategories = [];
