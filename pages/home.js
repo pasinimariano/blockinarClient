@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import { Box, CircularProgress, Container } from "@mui/material";
 import moment from "moment";
@@ -33,16 +34,28 @@ export default function Home() {
   const [modalBody, setModalBody] = useState("");
   const [reservationForEdit, setReservationForEdit] = useState(null);
 
+  const router = useRouter();
   const currentDay = moment();
   const urlAllRooms = process.env.GET_ALLROOMS_URL;
   const dayReservationsUrl = process.env.GET_DAYRESERVATIONS_URL;
 
+  const refreshData = () => {
+    const urlDayReservations = `${dayReservationsUrl}${dayForGetData}`;
+    getAllData(setDayReservations, "bookings", urlDayReservations, router);
+    getAllData(setAllRooms, "rooms", urlAllRooms, router);
+  };
+
   useEffect(() => {
     if (!allRooms) {
-      getAllData(setAllRooms, urlAllRooms);
+      getAllData(setAllRooms, "rooms", urlAllRooms, router);
     }
 
-    const formatedCurrentDay = `${currentDay.format("YYYY-MM-D")}23:00:00`;
+    const formatedDay = `0${currentDay.format("D")}`.slice(-2);
+    const formatedMonth = `0${currentDay.format("M")}`.slice(-2);
+    const formatedYear = currentDay.format("YYYY");
+
+    const formatedCurrentDay = `${formatedYear}-${formatedMonth}-${formatedDay}`;
+
     setDayForGetData(formatedCurrentDay);
     setDaySelected(currentDay.format("D/MM"));
   }, []);
@@ -51,7 +64,7 @@ export default function Home() {
     setDayReservations(null);
     if (dayForGetData) {
       const urlDayReservations = `${dayReservationsUrl}${dayForGetData}`;
-      getAllData(setDayReservations, urlDayReservations);
+      getAllData(setDayReservations, "bookings", urlDayReservations, router);
     }
   }, [dayForGetData]);
 
@@ -80,7 +93,6 @@ export default function Home() {
           <ControlsDayReservation
             Context={Context}
             currentDay={currentDay}
-            allRooms={allRooms}
             dayReservations={dayReservations}
             setDayReservations={setDayReservations}
             setDaySelected={setDaySelected}
@@ -139,6 +151,7 @@ export default function Home() {
           allRooms={allRooms}
           BodyCreate={BodyCreateReservation}
           BodyEdit={BodyEditReservation}
+          refreshData={refreshData}
           styles={styles}
         />
       </Box>

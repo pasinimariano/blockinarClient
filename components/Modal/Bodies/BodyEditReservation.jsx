@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import { Box, Typography, Container, CircularProgress } from "@mui/material";
 import { Formik } from "formik";
 
@@ -12,18 +13,33 @@ export default function BodyEditReservation({
   handleClose,
   allRooms,
   modalBody,
-  prevData,
+  refreshData,
   styles,
 }) {
+  const router = useRouter();
   const [openDialog, setOpenDialog] = useState(false);
+  const [getReservation, setGetReservation] = useState(null);
   const [reservation, setReservation] = useState(null);
 
   useEffect(() => {
     const url = process.env.GET_RESERVATIONBYID_URL;
     const id = context.reservationForEdit;
     const urlReservationsById = `${url}${id}`;
-    getAllData(setReservation, urlReservationsById);
+    getAllData(setGetReservation, "bookings", urlReservationsById, router);
   }, []);
+
+  useEffect(() => {
+    if (getReservation) {
+      if (getReservation[0]["room"]) {
+        getReservation[0]["status_id"] =
+          getReservation[0]["booking_status"]["id"];
+        getReservation[0]["room_id"] = getReservation[0]["room"]["id"];
+        delete getReservation[0]["room"];
+        delete getReservation[0]["booking_status"];
+      }
+      setReservation(getReservation[0]);
+    }
+  }, [getReservation]);
 
   return (
     <Box>
@@ -75,6 +91,7 @@ export default function BodyEditReservation({
                 setOpenDialog={setOpenDialog}
                 allRooms={allRooms}
                 modalBody={modalBody}
+                refreshData={refreshData}
                 styles={styles}
               />
             )}

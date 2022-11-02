@@ -84,13 +84,6 @@ export default function AverangeCostOfRooms({ averangeCost }) {
         },
       },
     },
-    title: {
-      text: "Costo promedio por habitación",
-      align: "center",
-      style: {
-        color: "#ffffff",
-      },
-    },
     grid: {
       row: {
         colors: ["#ffffff", "#B2B2B2"],

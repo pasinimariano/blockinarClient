@@ -6,8 +6,7 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-export default function ChartRoomsOccupancy({ allRooms }) {
-  const [occupancy, setOccupancy] = useState({});
+export default function ChartRoomsOccupancy({ occupancy }) {
   const [series, setSeries] = useState([]);
   const [config, setConfig] = useState({
     labels: [],
@@ -32,27 +31,15 @@ export default function ChartRoomsOccupancy({ allRooms }) {
     },
   });
 
-  const getRoomsOccupancy = () => {
-    if (allRooms) {
-      var auxFree = 0;
-      var auxOccupies = 0;
-
-      allRooms.map((room) => {
-        !room["occupancy"] ? (auxFree += 1) : (auxOccupies += 1);
-      });
-
-      setOccupancy({ Libres: auxFree, Ocupadas: auxOccupies });
+  useEffect(() => {
+    if (occupancy) {
       setSeries(Object.values(occupancy));
       setConfig((prevState) => ({
         ...prevState,
         labels: Object.keys(occupancy),
       }));
     }
-  };
-
-  useEffect(() => {
-    getRoomsOccupancy();
-  }, [allRooms]);
+  }, [occupancy]);
 
   return (
     <Box sx={{ mt: 4 }}>

@@ -9,8 +9,6 @@ export default function ModalLayout({
   BodyEdit,
   reservation,
   refreshData,
-  handleOpenSnackBar,
-  goTo,
   styles,
 }) {
   const context = useContext(Context);
@@ -33,6 +31,7 @@ export default function ModalLayout({
               handleClose={handleClose}
               allRooms={allRooms}
               modalBody={context.modalBody}
+              refreshData={refreshData}
               styles={styles}
             />
           ) : (
@@ -42,6 +41,7 @@ export default function ModalLayout({
               allRooms={allRooms}
               modalBody={context.modalBody}
               reservation={reservation}
+              refreshData={refreshData}
               styles={styles}
             />
           )}

@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import {
   Box,
   TextField,
@@ -17,6 +18,7 @@ import dayjs from "dayjs";
 import "dayjs/locale/es-mx";
 
 import ResponsiveDialog from "../../Dialogs/ResponsiveDialog";
+import getAllData from "../../../utils/getAllData";
 
 export default function FormReservations({
   context,
@@ -33,17 +35,22 @@ export default function FormReservations({
   setOpenDialog,
   allRooms,
   modalBody,
+  refreshData,
   styles,
 }) {
+  const router = useRouter();
   const [date, setDate] = useState(dayjs(null));
   const [outDate, setOutDate] = useState(dayjs(null));
   const [totalPrice, setTotalPrice] = useState(null);
-  const bookingStatus = [
-    { status: "confirmed", color: "#00C851", value: "confirmed" },
-    { status: "in house", color: "#9933CC", value: "in_house" },
-    { status: "cancelled", color: "#CC0000", value: "cancelled" },
-    { status: "checked out", color: "#0099CC", value: "checked_out" },
-  ];
+  const [bookingStatus, setBookingStatus] = useState(null);
+  const bookingStatusColors = {
+    Confirmed: "#2BBBAD",
+    "In House": "#ffbb33",
+    "Checked In": "#00C851",
+    Cancelled: "#CC0000",
+    "Checked Out": "#9933CC",
+  };
+
   const today = new Date();
   const tomorrow = new Date(today);
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -59,6 +66,12 @@ export default function FormReservations({
       },
     },
   });
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+    context.setModalShow(false);
+    context.setModalBody("");
+  };
 
   useEffect(() => {
     if ((!isNaN(date["$y"]) && !isNaN(outDate["$y"])) || (date && outDate)) {
@@ -78,7 +91,9 @@ export default function FormReservations({
       const daysDifference = Math.ceil(timeDifference / (1000 * 60 * 60 * 24));
 
       const totalPrice = values["price_per_night"] * daysDifference;
+      const urlGetAllStatus = process.env.GET_ALL_STATUS_URL;
 
+      getAllData(setBookingStatus, "status", urlGetAllStatus, router);
       setDate(checkInDate);
       setOutDate(checkOutDate);
       setTotalPrice(totalPrice);
@@ -91,40 +106,55 @@ export default function FormReservations({
         {context.modalBody === "edit" ? (
           <>
             <Grid sm={4}></Grid>
-            <Grid sm={4}>
-              <TextField
-                name="booking_status"
-                label="Estado"
-                fullWidth
-                required
-                select
-                size="small"
-                value={values["booking_status"]}
-                onChange={(option) => {
-                  console.log(option);
-                  setFieldValue("booking_status", option.target.value);
-                }}
-                onBlur={handleBlur}
-                error={
-                  touched["booking_status"] && Boolean(errors["booking_status"])
-                }
-                helperText={
-                  touched["booking_status"] && Boolean(errors["booking_status"])
-                    ? errors["booking_status"]
-                    : " "
-                }
-              >
-                {bookingStatus.map((status) => (
-                  <MenuItem
-                    key={status.value}
-                    value={status.value}
-                    style={{ color: status.color }}
-                  >
-                    {status.status}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
+            {!bookingStatus ? (
+              <Grid sm={4}>
+                {" "}
+                <TextField label="Estado" size="small" fullWidth />
+              </Grid>
+            ) : (
+              <Grid sm={4}>
+                <TextField
+                  name="status_id"
+                  label="Estado"
+                  fullWidth
+                  required
+                  select
+                  size="small"
+                  value={values["status_id"]}
+                  onChange={(option) => {
+                    setFieldValue("status_id", option.target.value);
+                  }}
+                  onBlur={handleBlur}
+                  error={touched["status_id"] && Boolean(errors["status_id"])}
+                  helperText={
+                    touched["status_id"] && Boolean(errors["status_id"])
+                      ? errors["status_id"]
+                      : " "
+                  }
+                >
+                  <MenuItem value=""></MenuItem>
+                  {bookingStatus &&
+                    bookingStatus.map((status) => (
+                      <MenuItem
+                        key={status["id"]}
+                        value={status["id"]}
+                        disabled={
+                          (status["booking_status"] == "Checked In" &&
+                            !values["room_id"]) ||
+                          (status["booking_status"] == "Checked Out" &&
+                            !values["room_id"])
+                        }
+                        style={{
+                          color: bookingStatusColors[status["booking_status"]],
+                        }}
+                      >
+                        {status["booking_status"]}
+                      </MenuItem>
+                    ))}
+                </TextField>
+              </Grid>
+            )}
+
             <Grid sm={4}></Grid>
           </>
         ) : null}
@@ -193,7 +223,7 @@ export default function FormReservations({
                   const formatedDay = `0${newDate["$D"]}`.slice(-2);
                   const formatedHour = `0${newDate["$H"]}`.slice(-2);
                   const formatedMinutes = `0${newDate["$m"]}`.slice(-2);
-                  const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}${formatedHour}:${formatedMinutes}:00`;
+                  const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}T${formatedHour}:${formatedMinutes}:00`;
 
                   setDate(newDate["$d"]);
                   setFieldValue("check_in_date", formatedDate);
@@ -242,7 +272,7 @@ export default function FormReservations({
                   const formatedDay = `0${newDate["$D"]}`.slice(-2);
                   const formatedHour = `0${newDate["$H"]}`.slice(-2);
                   const formatedMinutes = `0${newDate["$m"]}`.slice(-2);
-                  const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}${formatedHour}:${formatedMinutes}:00`;
+                  const formatedDate = `${newDate["$y"]}-${formatedMonth}-${formatedDay}T${formatedHour}:${formatedMinutes}:00`;
 
                   setOutDate(newDate["$d"]);
                   setFieldValue("check_out_date", formatedDate);
@@ -275,11 +305,11 @@ export default function FormReservations({
         <Grid sm={3}>
           <TextField
             name="room_id"
-            label={values["room_id"] ? "Habitación" : "Asignar habitación"}
+            label={values["room"] ? "Habitación" : "Asignar habitación"}
             fullWidth
             select
             size="small"
-            value={values["room_id"]}
+            value={values["room_id"] ? values["room_id"] : ""}
             onChange={(option) => {
               setFieldValue("room_id", option.target.value);
             }}
@@ -291,6 +321,7 @@ export default function FormReservations({
                 : " "
             }
           >
+            <MenuItem value=""> Desasignar </MenuItem>
             {allRooms &&
               allRooms.map((room) => (
                 <MenuItem
@@ -299,7 +330,7 @@ export default function FormReservations({
                   style={
                     room.occupancy === 1 ? { color: "red" } : { color: "green" }
                   }
-                  disabled={room.occupancy === 1 ? true : false}
+                  disabled={room.occupancy === 1}
                 >
                   {room.id}
                 </MenuItem>
@@ -320,7 +351,7 @@ export default function FormReservations({
             inputProps={{ style: { textAlign: "center" } }}
             fullWidth
             size="small"
-            value={values["price_per_night"]}
+            value={!values["price_per_night"] ? "" : values["price_per_night"]}
             onChange={handleChange}
             onBlur={(e) => {
               const value = (e.target.value || "").replace(/\s+/gi, " ");
@@ -344,7 +375,9 @@ export default function FormReservations({
             inputProps={{ style: { textAlign: "center" } }}
             fullWidth
             size="small"
-            value={values["number_of_guests"]}
+            value={
+              !values["number_of_guests"] ? "" : values["number_of_guests"]
+            }
             onChange={handleChange}
             onBlur={(e) => {
               const value = (e.target.value || "").replace(/\s+/gi, " ");
@@ -398,7 +431,7 @@ export default function FormReservations({
       </Box>
       <ResponsiveDialog
         openDialog={openDialog}
-        setOpenDialog={setOpenDialog}
+        handleClose={handleCloseDialog}
         isSubmitting={isSubmitting}
         title={
           context.modalBody === "edit"
@@ -407,6 +440,8 @@ export default function FormReservations({
         }
         content={{ ...values, totalPrice }}
         styles={styles}
+        body={context.modalBody}
+        refreshData={refreshData}
       />
     </Box>
   );

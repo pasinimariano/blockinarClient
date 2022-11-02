@@ -6,6 +6,7 @@ import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
 
 import linkTo from "../../utils/linkTo";
+import SwalSuccess from "../../utils/swalSuccess";
 
 export default function NavigationBar() {
   const router = useRouter();
@@ -46,7 +47,7 @@ export default function NavigationBar() {
                 }
               />
             </Tooltip>
-            <Tooltip title="Settings">
+            {/*    <Tooltip title="Settings">
               <SettingsRoundedIcon
                 onClick={() => linkTo("/settings", router)}
                 style={
@@ -63,10 +64,14 @@ export default function NavigationBar() {
                       }
                 }
               />
-            </Tooltip>
+            </Tooltip> */}
             <Tooltip title="Cerrar sesión">
               <ExitToAppRoundedIcon
-                onClick={() => linkTo("/", router)}
+                onClick={() => {
+                  localStorage.removeItem("access_token");
+                  linkTo("/", router);
+                  SwalSuccess("Sesión cerrada correctamente");
+                }}
                 style={{
                   color: "#ffffffff",
                   marginLeft: "10px",

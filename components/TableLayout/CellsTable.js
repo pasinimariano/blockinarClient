@@ -6,7 +6,7 @@ export function CellsTableAllRooms({ room }) {
   return (
     <TableRow>
       <TableCell align="center">{room["id"]}</TableCell>
-      <TableCell align="center">{room["category"]}</TableCell>
+      <TableCell align="center">{room["category"]["category_name"]}</TableCell>
       <TableCell align="center">{room["max_occupancy"]}</TableCell>
       <TableCell
         align="center"
@@ -21,11 +21,20 @@ export function CellsTableAllRooms({ room }) {
 export function CellsTableDayReservation({ reservation, Context }) {
   const context = useContext(Context);
   const bookingStatus = {
-    confirmed: "#00C851",
-    in_house: "#9933CC",
-    cancelled: "#CC0000",
-    checked_out: "#0099CC",
+    Confirmed: "#2BBBAD",
+    "In House": "#ffbb33",
+    "Checked In": "#00C851",
+    Cancelled: "#CC0000",
+    "Checked Out": "#9933CC",
   };
+
+  const splitTimeCheckIn = reservation["check_in_date"].split("T");
+  const splitDateCheckIn = splitTimeCheckIn[0].split("-");
+  const formatedCheckInDate = `${splitDateCheckIn[2]}/${splitDateCheckIn[1]}/${splitDateCheckIn[0]} - ${splitTimeCheckIn[1]}`;
+
+  const splitTimeCheckOut = reservation["check_out_date"].split("T");
+  const splitDateCheckOut = splitTimeCheckOut[0].split("-");
+  const formatedCheckInOut = `${splitDateCheckOut[2]}/${splitDateCheckOut[1]}/${splitDateCheckOut[0]} - ${splitTimeCheckOut[1]}`;
 
   const handleClick = () => {
     context.setModalShow(true);
@@ -38,23 +47,27 @@ export function CellsTableDayReservation({ reservation, Context }) {
       <TableCell
         align="center"
         style={{
-          color: bookingStatus[reservation["booking_status"]],
+          color: bookingStatus[reservation["booking_status"]["booking_status"]],
         }}
       >
-        {reservation["booking_status"].toUpperCase()}
+        {reservation["booking_status"]["booking_status"].toUpperCase()}
       </TableCell>
-      <TableCell align="center">{reservation["room_id"]}</TableCell>
-      <TableCell align="center">{`${reservation["check_in_date"].slice(
-        0,
-        10
-      )} - ${reservation["check_in_date"].slice(11, 13)}:00`}</TableCell>
-      <TableCell align="center">{`${reservation["check_out_date"].slice(
-        0,
-        10
-      )} - ${reservation["check_out_date"].slice(11, 13)}:00`}</TableCell>
+      <TableCell align="center">
+        {!reservation["room"] ? "-" : reservation["room"]["id"]}
+      </TableCell>
+      <TableCell align="center">{formatedCheckInDate}</TableCell>
+      <TableCell align="center">{formatedCheckInOut}</TableCell>
       <TableCell align="center">{`${reservation["last_name"]},  ${reservation["first_name"]}`}</TableCell>
-      <TableCell align="center">{reservation["number_of_guests"]}</TableCell>
-      <TableCell align="center">{`$ ${reservation["price_per_night"]}`}</TableCell>
+      <TableCell align="center">
+        {!reservation["number_of_guests"]
+          ? "-"
+          : reservation["number_of_guests"]}
+      </TableCell>
+      <TableCell align="center">
+        {!reservation["price_per_night"]
+          ? "-"
+          : `$ ${reservation["price_per_night"]}`}
+      </TableCell>
       <TableCell align="center">
         <Tooltip title="Editar reserva">
           <EditRoundedIcon color="secondary" onClick={handleClick} />

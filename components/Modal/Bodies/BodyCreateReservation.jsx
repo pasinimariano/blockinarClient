@@ -11,6 +11,7 @@ export default function BodyCreateReservation({
   handleClose,
   allRooms,
   modalBody,
+  refreshData,
   styles,
 }) {
   const [openDialog, setOpenDialog] = useState(false);
@@ -69,6 +70,7 @@ export default function BodyCreateReservation({
               setOpenDialog={setOpenDialog}
               allRooms={allRooms}
               modalBody={modalBody}
+              refreshData={refreshData}
               styles={styles}
             />
           )}

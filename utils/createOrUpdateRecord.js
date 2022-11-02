@@ -3,10 +3,18 @@ import axios from "axios";
 import { getToken } from "./securityService";
 import linkTo from "./linkTo";
 import SwalError from "./swalError";
+import SwalSuccess from "./swalSuccess";
 
-const getAllData = async (setter, object, url, router) => {
+const createOrUpdateRecord = async (
+  params,
+  refreshData,
+  handleClose,
+  url,
+  router,
+  body
+) => {
   const baseUrl = process.env.BASE_URL;
-
+  const method = body === "create" ? axios.post : axios.put;
   try {
     const token = getToken();
 
@@ -15,19 +23,20 @@ const getAllData = async (setter, object, url, router) => {
       linkTo("/", router);
       SwalError("Sesión vencida, vuelva a ingresar");
     } else
-      await axios
-        .get(`${baseUrl}${url}`, { headers: { token: token } })
+      await method(`${baseUrl}${url}`, params, { headers: { token: token } })
         .then((res) => {
           const token = res.data.token;
           localStorage.setItem("access_token", JSON.stringify(token));
-          setter(res.data[object]);
+          refreshData();
+          handleClose();
+          {
+            body === "create"
+              ? SwalSuccess("Reserva creada exitosamente")
+              : SwalSuccess("Reserva actualizada exitosamente");
+          }
         })
         .catch((error) => {
-          if (error.response.data === "Invalid request = Token is expired") {
-            localStorage.removeItem("access_token");
-            linkTo("/", router);
-            SwalError("Sesión vencida, vuelva a ingresar");
-          }
+          handleClose();
           SwalError(error.response.data);
         });
   } catch (error) {
@@ -35,4 +44,4 @@ const getAllData = async (setter, object, url, router) => {
   }
 };
 
-export default getAllData;
+export default createOrUpdateRecord;

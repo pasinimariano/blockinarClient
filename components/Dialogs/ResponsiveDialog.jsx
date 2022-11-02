@@ -1,3 +1,4 @@
+import { useRouter } from "next/router";
 import {
   Box,
   Dialog,
@@ -11,20 +12,62 @@ import {
 } from "@mui/material";
 import JSONPRETTY from "react-json-pretty";
 
+import createOrUpdateRecord from "../../utils/createOrUpdateRecord";
+
 export default function ResponsiveDialog({
   openDialog,
-  setOpenDialog,
   title,
   content,
-  handleSubmit,
+  body,
+  refreshData,
+  handleClose,
   styles,
 }) {
+  const router = useRouter();
+  const urlForCreateBooking = process.env.CREATE_RESERVATION_URL;
+  const urlForUpdateBooking = process.env.UPDATE_RESERVATION_URL;
+  const urlUpdateById = `${urlForUpdateBooking}${content["id"]}`;
   const theme = useTheme();
   const fullScreen = useMediaQuery(theme.breakpoints.down("md"));
   const JSONPrettyMon = require("react-json-pretty/dist/monikai");
 
-  const handleClose = () => {
-    setOpenDialog(false);
+  const params = {
+    first_name: content["first_name"],
+    last_name: content["last_name"],
+    check_in_date: content["check_in_date"],
+    check_out_date: content["check_out_date"],
+    room_id: !content["room_id"] ? "" : content["room_id"],
+    price_per_night: !content["price_per_night"]
+      ? ""
+      : parseInt(content["price_per_night"]),
+    number_of_guests: !content["number_of_guests"]
+      ? ""
+      : parseInt(content["number_of_guests"]),
+    status_id: content["status_id"] ? content["status_id"] : "",
+  };
+
+  const handleSubmit = () => {
+    if (body === "create") {
+      createOrUpdateRecord(
+        params,
+        refreshData,
+        handleClose,
+        urlForCreateBooking,
+        router,
+        "create"
+      );
+    }
+
+    if (body === "edit") {
+      createOrUpdateRecord(
+        params,
+        refreshData,
+        handleClose,
+        urlUpdateById,
+        router,
+        "edit"
+      );
+    }
   };
 
   return (
@@ -45,7 +88,7 @@ export default function ResponsiveDialog({
         <DialogContent className={styles.dialogColor}>
           <JSONPRETTY
             id="json-pretty"
-            data={content}
+            data={params}
             theme={JSONPrettyMon}
           ></JSONPRETTY>
         </DialogContent>
@@ -61,11 +104,11 @@ export default function ResponsiveDialog({
           </Button>
           <Button
             autoFocus
-            onClick={() => console.log("hola")}
+            onClick={handleSubmit}
             color="secondary"
             variant="contained"
           >
-            Crear
+            {body === "create" ? "Crear" : "Editar"}
           </Button>
         </DialogActions>
       </Dialog>
