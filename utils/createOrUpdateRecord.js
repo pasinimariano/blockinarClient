@@ -39,7 +39,7 @@ const createOrUpdateRecord = async (
           handleClose();
           SwalError(error.response.data);
         });
-  } catch {
+  } catch (error) {
     SwalError("Ha ocurrido un error en la comunicación");
   }
 };

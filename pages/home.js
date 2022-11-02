@@ -42,6 +42,7 @@ export default function Home() {
   const refreshData = () => {
     const urlDayReservations = `${dayReservationsUrl}${dayForGetData}`;
     getAllData(setDayReservations, "bookings", urlDayReservations, router);
+    getAllData(setAllRooms, "rooms", urlAllRooms, router);
   };
 
   useEffect(() => {

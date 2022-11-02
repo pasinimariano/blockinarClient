@@ -45,10 +45,10 @@ export default function FormReservations({
   const [bookingStatus, setBookingStatus] = useState(null);
   const bookingStatusColors = {
     Confirmed: "#2BBBAD",
-    In_house: "#9933CC",
-    Checked_in: "#00C851",
+    "In House": "#ffbb33",
+    "Checked In": "#00C851",
     Cancelled: "#CC0000",
-    Checked_out: "#0099CC",
+    "Checked Out": "#9933CC",
   };
 
   const today = new Date();
@@ -106,41 +106,55 @@ export default function FormReservations({
         {context.modalBody === "edit" ? (
           <>
             <Grid sm={4}></Grid>
-            <Grid sm={4}>
-              <TextField
-                name="booking_status"
-                label="Estado"
-                fullWidth
-                required
-                select
-                size="small"
-                value={values["booking_status"]["booking_status"]}
-                onChange={(option) => {
-                  setFieldValue("booking_status", option.target.value);
-                }}
-                onBlur={handleBlur}
-                error={
-                  touched["booking_status"] && Boolean(errors["booking_status"])
-                }
-                helperText={
-                  touched["booking_status"] && Boolean(errors["booking_status"])
-                    ? errors["booking_status"]
-                    : " "
-                }
-              >
-                {bookingStatus.map((status) => (
-                  <MenuItem
-                    key={status["id"]}
-                    value={status["id"]}
-                    style={{
-                      color: bookingStatusColors[status["booking_status"]],
-                    }}
-                  >
-                    {status["booking_status"]}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </Grid>
+            {!bookingStatus ? (
+              <Grid sm={4}>
+                {" "}
+                <TextField label="Estado" size="small" fullWidth />
+              </Grid>
+            ) : (
+              <Grid sm={4}>
+                <TextField
+                  name="status_id"
+                  label="Estado"
+                  fullWidth
+                  required
+                  select
+                  size="small"
+                  value={values["status_id"]}
+                  onChange={(option) => {
+                    setFieldValue("status_id", option.target.value);
+                  }}
+                  onBlur={handleBlur}
+                  error={touched["status_id"] && Boolean(errors["status_id"])}
+                  helperText={
+                    touched["status_id"] && Boolean(errors["status_id"])
+                      ? errors["status_id"]
+                      : " "
+                  }
+                >
+                  <MenuItem value=""></MenuItem>
+                  {bookingStatus &&
+                    bookingStatus.map((status) => (
+                      <MenuItem
+                        key={status["id"]}
+                        value={status["id"]}
+                        disabled={
+                          (status["booking_status"] == "Checked In" &&
+                            !values["room_id"]) ||
+                          (status["booking_status"] == "Checked Out" &&
+                            !values["room_id"])
+                        }
+                        style={{
+                          color: bookingStatusColors[status["booking_status"]],
+                        }}
+                      >
+                        {status["booking_status"]}
+                      </MenuItem>
+                    ))}
+                </TextField>
+              </Grid>
+            )}
+
             <Grid sm={4}></Grid>
           </>
         ) : null}
@@ -307,7 +321,7 @@ export default function FormReservations({
                 : " "
             }
           >
-            <MenuItem value=""></MenuItem>
+            <MenuItem value=""> Desasignar </MenuItem>
             {allRooms &&
               allRooms.map((room) => (
                 <MenuItem
@@ -316,7 +330,7 @@ export default function FormReservations({
                   style={
                     room.occupancy === 1 ? { color: "red" } : { color: "green" }
                   }
-                  disabled={room.occupancy === 1 ? true : false}
+                  disabled={room.occupancy === 1}
                 >
                   {room.id}
                 </MenuItem>

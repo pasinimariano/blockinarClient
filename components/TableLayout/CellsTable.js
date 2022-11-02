@@ -22,11 +22,19 @@ export function CellsTableDayReservation({ reservation, Context }) {
   const context = useContext(Context);
   const bookingStatus = {
     Confirmed: "#2BBBAD",
-    In_house: "#9933CC",
-    Checked_in: "#00C851",
+    "In House": "#ffbb33",
+    "Checked In": "#00C851",
     Cancelled: "#CC0000",
-    Checked_out: "#0099CC",
+    "Checked Out": "#9933CC",
   };
+
+  const splitTimeCheckIn = reservation["check_in_date"].split("T");
+  const splitDateCheckIn = splitTimeCheckIn[0].split("-");
+  const formatedCheckInDate = `${splitDateCheckIn[2]}/${splitDateCheckIn[1]}/${splitDateCheckIn[0]} - ${splitTimeCheckIn[1]}`;
+
+  const splitTimeCheckOut = reservation["check_out_date"].split("T");
+  const splitDateCheckOut = splitTimeCheckOut[0].split("-");
+  const formatedCheckInOut = `${splitDateCheckOut[2]}/${splitDateCheckOut[1]}/${splitDateCheckOut[0]} - ${splitTimeCheckOut[1]}`;
 
   const handleClick = () => {
     context.setModalShow(true);
@@ -47,14 +55,8 @@ export function CellsTableDayReservation({ reservation, Context }) {
       <TableCell align="center">
         {!reservation["room"] ? "-" : reservation["room"]["id"]}
       </TableCell>
-      <TableCell align="center">{`${reservation["check_in_date"].slice(
-        0,
-        10
-      )} - ${reservation["check_in_date"].slice(11, 13)}:00`}</TableCell>
-      <TableCell align="center">{`${reservation["check_out_date"].slice(
-        0,
-        10
-      )} - ${reservation["check_out_date"].slice(11, 13)}:00`}</TableCell>
+      <TableCell align="center">{formatedCheckInDate}</TableCell>
+      <TableCell align="center">{formatedCheckInOut}</TableCell>
       <TableCell align="center">{`${reservation["last_name"]},  ${reservation["first_name"]}`}</TableCell>
       <TableCell align="center">
         {!reservation["number_of_guests"]

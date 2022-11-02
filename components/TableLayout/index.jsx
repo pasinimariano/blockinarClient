@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import {
   Container,
   Paper,
@@ -37,7 +37,7 @@ export default function TableLayout({
   return (
     <Container className={styles.tableContainer}>
       <Paper className={styles.tablePaper}>
-        <TableContainer>
+        <TableContainer style={cells === "rooms" ? { height: 600 } : null}>
           <Table stickyHeader aria-label="sticky table">
             <TableHead>
               <TableRow>

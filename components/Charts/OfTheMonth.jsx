@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import dynamic from "next/dynamic";
 import moment from "moment";
 
@@ -6,11 +6,9 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-export default function ChartOfTheMonth({
-  reservationsOfTheMonth,
-  setReservationsOfTheMonth,
-}) {
+export default function ChartOfTheMonth({ reservationsOfTheMonth }) {
   const daysInMonth = moment().daysInMonth();
+  const [tableValues, setTableValues] = useState({});
 
   const config = {
     chart: {
@@ -38,17 +36,13 @@ export default function ChartOfTheMonth({
     stroke: {
       curve: "smooth",
     },
-    title: {
-      text: "Reservas del mes",
-      align: "center",
-    },
     grid: {
       row: {
         colors: ["#203239", "transparent"],
       },
     },
     xaxis: {
-      categories: Object.keys(reservationsOfTheMonth),
+      categories: Object.keys(tableValues),
       title: {
         text: "Días del mes",
       },
@@ -63,7 +57,7 @@ export default function ChartOfTheMonth({
   const series = [
     {
       name: "Cantidad",
-      data: Object.values(reservationsOfTheMonth),
+      data: Object.values(tableValues),
     },
   ];
 
@@ -72,16 +66,18 @@ export default function ChartOfTheMonth({
     const aux = {};
 
     while (count <= daysInMonth) {
-      aux[count] = 0;
+      reservationsOfTheMonth[count]
+        ? (aux[count] = reservationsOfTheMonth[count])
+        : (aux[count] = 0);
+
       count += 1;
     }
-
-    setReservationsOfTheMonth(aux);
+    setTableValues(aux);
   };
 
   useEffect(() => {
     addCount();
-  }, []);
+  }, [reservationsOfTheMonth]);
 
   return (
     <div id="chart">

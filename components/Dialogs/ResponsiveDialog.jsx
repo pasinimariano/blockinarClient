@@ -39,11 +39,11 @@ export default function ResponsiveDialog({
     room_id: !content["room_id"] ? "" : content["room_id"],
     price_per_night: !content["price_per_night"]
       ? ""
-      : content["price_per_night"],
+      : parseInt(content["price_per_night"]),
     number_of_guests: !content["number_of_guests"]
       ? ""
-      : content["number_of_guests"],
-    status_id: content["booking_status"] ? content["booking_status"]["id"] : "",
+      : parseInt(content["number_of_guests"]),
+    status_id: content["status_id"] ? content["status_id"] : "",
   };
 
   const handleSubmit = () => {
