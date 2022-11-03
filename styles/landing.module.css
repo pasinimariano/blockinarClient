@@ -10,14 +10,16 @@
 
 .titleContainer {
   display: flex;
+  flex-direction: row;
   align-items: center;
+  justify-content: flex-start;
   height: 100%;
 }
 
 .title {
   color: var(--gray);
   font-size: 30px;
-  font-weight: bolder;
+  font-weight: bold;
   font-style: oblique;
   letter-spacing: 0.3ex;
 }
@@ -30,6 +32,7 @@
 .mainContainer {
   height: 75vh;
   display: flex;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
 }
@@ -44,6 +47,5 @@
 .titleForm {
   font-size: 25px;
   margin: 20px;
-  line-height: 1.125;
 }
 
