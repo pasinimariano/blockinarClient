@@ -5,17 +5,19 @@ export default class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <link rel="preload" href="https://fonts.googleapis.com" />
-          <link rel="preload" href="https://fonts.gstatic.com" crossorigin />
           <link
-            href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;1,100&display=swap"
-            rel="stylesheet"
+            rel="preload"
+            href="/fonts/Lato-Bold.ttf"
+            as="font"
+            type="font/ttf"
+            crossOrigin=""
           />
-          <link rel="preload" href="https://fonts.googleapis.com" />
-          <link rel="preload" href="https://fonts.gstatic.com" crossorigin />
           <link
-            href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;1,100;1,700&display=swap"
-            rel="stylesheet"
+            rel="preload"
+            href="/fonts/Lato-Regular.ttf"
+            as="font"
+            type="font/ttf"
+            crossOrigin=""
           />
         </Head>
         <body>
