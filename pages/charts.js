@@ -145,7 +145,7 @@ export default function Graphs() {
                 <Container className={styles.tableTitleContainer}>
                   <Typography className="titleDetail"> - </Typography>
                   <Typography className={styles.tableTitleWhite}>
-                    Revenue diario
+                    Revenue hola
                   </Typography>
                   <Typography className="titleDetail"> - </Typography>
                 </Container>
