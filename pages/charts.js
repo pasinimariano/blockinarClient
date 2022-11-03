@@ -89,26 +89,24 @@ export default function Graphs() {
   useEffect(() => {
     getAllData(setAllReservations, "bookings", urlAllReservations, router);
     getAllData(setAllRooms, "rooms", urlAllRooms, router);
-  }, [getAllData, setAllReservations, setAllRooms]);
+  }, []);
 
   useEffect(() => {
     getReservationsOfTheMont();
-  }, [allReservations, getReservationsOfTheMont]);
+  }, [allReservations]);
 
   useEffect(() => {
     getRoomsOccupancy();
-  }, [allRooms, getRoomsOccupancy]);
+  }, [allRooms]);
 
   useEffect(() => {
     if (adr && allRooms) {
       const getOccupancy = adr["occupancy"] / allRooms.length;
       const avaibleRooms = allRooms.length - adr["occupancy"];
-      const newAdr = (adr["income"] / adr["occupancy"]).toFixed(2);
-      const newRevPar = ((getAdr * getOccupancy) / avaibleRooms).toFixed(2);
-      setGetAdr(newAdr);
-      setRevPAR(newRevPar);
+      setGetAdr((adr["income"] / adr["occupancy"]).toFixed(2));
+      setRevPAR(((getAdr * getOccupancy) / avaibleRooms).toFixed(2));
     }
-  }, [adr, allRooms, setGetAdr, setRevPAR]);
+  }, [adr, allRooms]);
 
   return (
     <div>
@@ -147,7 +145,7 @@ export default function Graphs() {
                 <Container className={styles.tableTitleContainer}>
                   <Typography className="titleDetail"> - </Typography>
                   <Typography className={styles.tableTitleWhite}>
-                    Revenue hola
+                    Revenue diario
                   </Typography>
                   <Typography className="titleDetail"> - </Typography>
                 </Container>
