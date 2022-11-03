@@ -89,24 +89,26 @@ export default function Graphs() {
   useEffect(() => {
     getAllData(setAllReservations, "bookings", urlAllReservations, router);
     getAllData(setAllRooms, "rooms", urlAllRooms, router);
-  }, []);
+  }, [getAllData, setAllReservations, setAllRooms]);
 
   useEffect(() => {
     getReservationsOfTheMont();
-  }, [allReservations]);
+  }, [allReservations, getReservationsOfTheMont]);
 
   useEffect(() => {
     getRoomsOccupancy();
-  }, [allRooms]);
+  }, [allRooms, getRoomsOccupancy]);
 
   useEffect(() => {
     if (adr && allRooms) {
       const getOccupancy = adr["occupancy"] / allRooms.length;
       const avaibleRooms = allRooms.length - adr["occupancy"];
-      setGetAdr((adr["income"] / adr["occupancy"]).toFixed(2));
-      setRevPAR(((getAdr * getOccupancy) / avaibleRooms).toFixed(2));
+      const newAdr = (adr["income"] / adr["occupancy"]).toFixed(2);
+      const newRevPar = ((getAdr * getOccupancy) / avaibleRooms).toFixed(2);
+      setGetAdr(newAdr);
+      setRevPAR(newRevPar);
     }
-  }, [adr, allRooms]);
+  }, [adr, allRooms, setGetAdr, setRevPAR]);
 
   return (
     <div>
