@@ -31,12 +31,14 @@ export default function BodyEditReservation({
   useEffect(() => {
     if (getReservation) {
       if (getReservation[0]["room"]) {
-        getReservation[0]["status_id"] =
-          getReservation[0]["booking_status"]["id"];
         getReservation[0]["room_id"] = getReservation[0]["room"]["id"];
         delete getReservation[0]["room"];
-        delete getReservation[0]["booking_status"];
       }
+
+      getReservation[0]["status_id"] =
+        getReservation[0]["booking_status"]["id"];
+      delete getReservation[0]["booking_status"];
+
       setReservation(getReservation[0]);
     }
   }, [getReservation]);

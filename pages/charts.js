@@ -6,12 +6,10 @@ import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import moment from "moment";
 
 import getAllData from "../utils/getAllData";
-import getDatesBetweenTwo from "../utils/getDatesBetweenTwo";
 import NavigationBar from "../components/NavigationBar";
 import ChartOfTheMonth from "../components/Charts/OfTheMonth";
 import ChartRoomsOccupancy from "../components/Charts/RoomsOccupancy";
 import AverangeCostOfRooms from "../components/Charts/AverageCostOfRooms";
-import RevenueChart from "../components/Charts/Revenue";
 
 import styles from "../styles/home.module.css";
 
@@ -105,7 +103,7 @@ export default function Graphs() {
     if (adr && allRooms) {
       const getOccupancy = adr["occupancy"] / allRooms.length;
       const avaibleRooms = allRooms.length - adr["occupancy"];
-      setGetAdr(adr["income"] / adr["occupancy"]);
+      setGetAdr((adr["income"] / adr["occupancy"]).toFixed(2));
       setRevPAR(((getAdr * getOccupancy) / avaibleRooms).toFixed(2));
     }
   }, [adr, allRooms]);
@@ -154,10 +152,10 @@ export default function Graphs() {
                 <ChartRoomsOccupancy occupancy={occupancy} />
                 <Container className={styles.tableTitleContainer}>
                   <Typography className={styles.tableTitleWhite}>
-                    {`ADR: $ ${getAdr}`}
+                    {!getAdr ? `ADR: ...` : `ADR: $ ${getAdr}`}
                   </Typography>
                   <Typography className={styles.tableTitleWhite}>
-                    {`RevPAR: $ ${RevPAR}`}
+                    {!RevPAR ? `RevPAR: ...` : `RevPAR: $ ${RevPAR}`}
                   </Typography>
                 </Container>
               </Grid>

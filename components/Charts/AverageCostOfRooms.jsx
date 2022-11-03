@@ -22,7 +22,7 @@ export default function AverangeCostOfRooms({ averangeCost }) {
     series: [
       {
         name: "Costo promedio",
-        data: average,
+        data: average || [],
         color: "#00ff99ff",
       },
     ],
@@ -46,7 +46,7 @@ export default function AverangeCostOfRooms({ averangeCost }) {
       },
     },
     xaxis: {
-      categories: Object.keys(averangeCost),
+      categories: Object.keys(averangeCost) || [],
       position: "top",
       axisBorder: {
         show: false,

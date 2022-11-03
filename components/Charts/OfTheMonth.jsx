@@ -42,7 +42,7 @@ export default function ChartOfTheMonth({ reservationsOfTheMonth }) {
       },
     },
     xaxis: {
-      categories: Object.keys(tableValues),
+      categories: Object.keys(tableValues) || [],
       title: {
         text: "Días del mes",
       },
@@ -57,7 +57,7 @@ export default function ChartOfTheMonth({ reservationsOfTheMonth }) {
   const series = [
     {
       name: "Cantidad",
-      data: Object.values(tableValues),
+      data: Object.values(tableValues) || [],
     },
   ];
 
