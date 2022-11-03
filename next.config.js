@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  optimizeFonts: false,
   env: {
     BASE_URL: process.env.BASE_URL,
     LOGIN_ADMIN: process.env.LOGIN_ADMIN,
