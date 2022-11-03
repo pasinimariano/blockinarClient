@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import Link from "next/link";
 import { Container, Box, Typography, Tooltip } from "@mui/material";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import TimelineRoundedIcon from "@mui/icons-material/TimelineRounded";
@@ -19,46 +20,49 @@ export default function NavigationBar() {
           <Typography className="navTitle">GAIA</Typography>
           <Box display="flex" justifyContent="flex-end" sx={{ width: "100%" }}>
             <Tooltip title="Home">
-              <HomeRoundedIcon
-                onClick={() => linkTo("/home", router)}
-                style={
-                  pathname === "/home"
-                    ? { color: "#00ff99ff", cursor: "pointer" }
-                    : { color: "#ffffffff", cursor: "pointer" }
-                }
-              />
+              <Link href="/home">
+                <HomeRoundedIcon
+                  style={
+                    pathname === "/home"
+                      ? { color: "#00ff99ff", cursor: "pointer" }
+                      : { color: "#ffffffff", cursor: "pointer" }
+                  }
+                />
+              </Link>
             </Tooltip>
             <Tooltip title="Gráficos">
-              <TimelineRoundedIcon
-                onClick={() => linkTo("/charts", router)}
-                style={
-                  pathname === "/charts"
-                    ? {
-                        color: "#00ff99ff",
-                        marginLeft: "10px",
-                        cursor: "pointer",
-                      }
-                    : {
-                        color: "#ffffffff",
-                        marginLeft: "10px",
-                        cursor: "pointer",
-                      }
-                }
-              />
+              <Link href="/charts">
+                <TimelineRoundedIcon
+                  style={
+                    pathname === "/charts"
+                      ? {
+                          color: "#00ff99ff",
+                          marginLeft: "10px",
+                          cursor: "pointer",
+                        }
+                      : {
+                          color: "#ffffffff",
+                          marginLeft: "10px",
+                          cursor: "pointer",
+                        }
+                  }
+                />
+              </Link>
             </Tooltip>
             <Tooltip title="Cerrar sesión">
-              <ExitToAppRoundedIcon
-                onClick={() => {
-                  linkTo("/", router);
-                  localStorage.removeItem("access_token");
-                  SwalSuccess("Sesión cerrada correctamente");
-                }}
-                style={{
-                  color: "#ffffffff",
-                  marginLeft: "10px",
-                  cursor: "pointer",
-                }}
-              />
+              <Link href="/">
+                <ExitToAppRoundedIcon
+                  onClick={() => {
+                    localStorage.removeItem("access_token");
+                    SwalSuccess("Sesión cerrada correctamente");
+                  }}
+                  style={{
+                    color: "#ffffffff",
+                    marginLeft: "10px",
+                    cursor: "pointer",
+                  }}
+                />
+              </Link>
             </Tooltip>
           </Box>
         </Container>

@@ -1,15 +1,11 @@
 import Head from "next/head";
-import { Link } from "@mui/material";
-import { useRouter } from "next/router";
 
 import TopBar from "../components/LandingPage/TopBar";
 import LoginForm from "../components/LandingPage/LoginForm";
 
-import linkTo from "../utils/linkTo";
 import styles from "../styles/landing.module.css";
 
 export default function Home() {
-  const router = useRouter();
   return (
     <div>
       <Head>
