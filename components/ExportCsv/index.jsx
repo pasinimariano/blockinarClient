@@ -32,7 +32,7 @@ export default function ExportCSV({ csvData, fileName, styles }) {
 
   return (
     <Tooltip title="Descargar archivo">
-      <Button onClick={() => exportToCSV(csvData, fileName)}>
+      <Button onClick={() => exportToCSV(dataToExport, fileName)}>
         <FileDownloadOutlinedIcon
           fontSize="large"
           className={styles.iconDownload}
