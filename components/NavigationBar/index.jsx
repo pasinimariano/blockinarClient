@@ -5,7 +5,6 @@ import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import TimelineRoundedIcon from "@mui/icons-material/TimelineRounded";
 import ExitToAppRoundedIcon from "@mui/icons-material/ExitToAppRounded";
 
-import linkTo from "../../utils/linkTo";
 import SwalSuccess from "../../utils/swalSuccess";
 
 export default function NavigationBar() {
