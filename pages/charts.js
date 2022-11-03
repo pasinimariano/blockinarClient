@@ -152,10 +152,12 @@ export default function Graphs() {
                 <ChartRoomsOccupancy occupancy={occupancy} />
                 <Container className={styles.tableTitleContainer}>
                   <Typography className={styles.tableTitleWhite}>
-                    {!getAdr ? `ADR: ...` : `ADR: $ ${getAdr}`}
+                    {!getAdr || isNaN(getAdr) ? `ADR: ...` : `ADR: $ ${getAdr}`}
                   </Typography>
                   <Typography className={styles.tableTitleWhite}>
-                    {!RevPAR ? `RevPAR: ...` : `RevPAR: $ ${RevPAR}`}
+                    {!RevPAR || isNaN(RevPAR)
+                      ? `RevPAR: ...`
+                      : `RevPAR: $ ${RevPAR}`}
                   </Typography>
                 </Container>
               </Grid>

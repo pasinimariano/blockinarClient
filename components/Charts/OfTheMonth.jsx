@@ -77,7 +77,7 @@ export default function ChartOfTheMonth({ reservationsOfTheMonth }) {
 
   useEffect(() => {
     addCount();
-  }, [reservationsOfTheMonth, addCount]);
+  }, [reservationsOfTheMonth]);
 
   return (
     <div id="chart">
