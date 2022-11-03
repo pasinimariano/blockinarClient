@@ -81,7 +81,7 @@ export default function FormReservations({
 
       setTotalPrice(totalPrice);
     }
-  }, [date, outDate, values["price_per_night"]]);
+  }, [date, outDate, values["price_per_night"], setTotalPrice]);
 
   useEffect(() => {
     if (context.modalBody === "edit" && values) {
@@ -98,7 +98,7 @@ export default function FormReservations({
       setOutDate(checkOutDate);
       setTotalPrice(totalPrice);
     }
-  }, []);
+  }, [getAllData, setDate, setOutDate, setTotalPrice]);
 
   return (
     <Box component="form" noValidate onSubmit={handleSubmit}>

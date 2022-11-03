@@ -65,16 +65,16 @@ export default function ControlsDayReservation({
     const urlGetAllCategories = process.env.GET_ALL_CATEGORIES;
 
     getAllData(setAllCategories, "categories", urlGetAllCategories, router);
-  }, []);
+  }, [getAllData, setAllCategories]);
 
   useEffect(() => {
     const filter = filterByCategory();
     setFilterReservations(filter);
-  }, [selectedCategory]);
+  }, [selectedCategory, filterByCategory, setFilterReservations]);
 
   useEffect(() => {
     setFilterReservations(dayReservations);
-  }, [dayReservations]);
+  }, [dayReservations, setFilterReservations]);
 
   return (
     <Grid container spacing={2} className={styles.controlsContainer}>
