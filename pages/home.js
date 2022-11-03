@@ -58,7 +58,7 @@ export default function Home() {
 
     setDayForGetData(formatedCurrentDay);
     setDaySelected(currentDay.format("D/MM"));
-  }, []);
+  }, [getAllData, setDayForGetData, setDaySelected]);
 
   useEffect(() => {
     setDayReservations(null);
@@ -66,7 +66,7 @@ export default function Home() {
       const urlDayReservations = `${dayReservationsUrl}${dayForGetData}`;
       getAllData(setDayReservations, "bookings", urlDayReservations, router);
     }
-  }, [dayForGetData]);
+  }, [dayForGetData, setDayForGetData, getAllData, setDayReservations]);
 
   return (
     <Context.Provider

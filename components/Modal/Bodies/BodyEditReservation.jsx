@@ -26,7 +26,7 @@ export default function BodyEditReservation({
     const id = context.reservationForEdit;
     const urlReservationsById = `${url}${id}`;
     getAllData(setGetReservation, "bookings", urlReservationsById, router);
-  }, []);
+  }, [getAllData, setGetReservation]);
 
   useEffect(() => {
     if (getReservation) {
@@ -41,7 +41,7 @@ export default function BodyEditReservation({
 
       setReservation(getReservation[0]);
     }
-  }, [getReservation]);
+  }, [getReservation, setReservation]);
 
   return (
     <Box>
