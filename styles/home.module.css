@@ -16,7 +16,6 @@
   font-size: 25px;
   margin: 20px;
   line-height: 1.125;
-  font-family: Lato;
 }
 
 .tableTitleDark {
@@ -24,7 +23,6 @@
   font-size: 25px;
   margin: 20px;
   line-height: 1.125;
-  font-family: Lato;
 }
 
 .controlsContainer {
@@ -85,7 +83,6 @@
 .noDataMessage {
   color: red;
   font-size: large;
-  font-family: Lato;
 }
 
 .dialogColor {
