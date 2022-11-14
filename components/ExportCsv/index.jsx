@@ -1,38 +1,40 @@
-import * as FileSaver from "file-saver";
+import { useState, useEffect } from "react";
 import * as XLSX from "xlsx";
-import { Button, Tooltip } from "@mui/material";
+import { Tooltip, Button } from "@mui/material";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 
 export default function ExportCSV({ csvData, fileName, styles }) {
-  const dataToExport =
-    csvData &&
-    csvData.map((room) => {
-      const newObj = {
-        id: room["id"],
-        category: room["category"]["category_name"],
-        max_occupancy: room["max_occupancy"],
-        occupancy: room["occupancy"],
-      };
+  const [formatedData, setFormatedData] = useState(null);
 
-      return newObj;
-    });
+  useEffect(() => {
+    const newData =
+      csvData &&
+      csvData.map((room) => {
+        const obj = {
+          id: room["id"],
+          category: room["category"]["category_name"],
+          max_occupancy: room["max_occupancy"],
+          occupancy: room["occupancy"],
+        };
 
-  const fileType =
-    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8";
-  const fileExtension = ".xlxs";
+        return obj;
+      });
 
-  const exportToCSV = (csvData, fileName) => {
-    const ws = XLSX.utils.json_to_sheet(csvData);
-    const wb = { Sheets: { data: ws }, SheetNames: ["data"] };
-    const excelBuffer = XLSX.write(wb, { bookType: "xlsx", type: "array" });
-    const data = new Blob([excelBuffer], { type: fileType });
+    setFormatedData(newData);
+  }, [csvData]);
 
-    FileSaver.saveAs(data, fileName + fileExtension);
+  const exportData = () => {
+    const filename = `${fileName}.xlsx`;
+
+    const ws = XLSX.utils.json_to_sheet(formatedData);
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, "Rooms");
+    XLSX.writeFile(wb, filename);
   };
 
   return (
     <Tooltip title="Descargar archivo">
-      <Button onClick={() => exportToCSV(dataToExport, fileName)}>
+      <Button onClick={exportData}>
         <FileDownloadOutlinedIcon
           fontSize="large"
           className={styles.iconDownload}
